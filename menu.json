@@ -1,0 +1,996 @@
+{
+  "restaurant": {
+    "name_cn": "家园中餐厅",
+    "name_ru": "Кафе Цзяюань",
+    "contacts": {
+      "phone": "+3752967158",
+      "telegram": "JIAYUAN6688"
+    }
+  },
+  "categories": [
+    {
+      "id": "G",
+      "name_cn": "盖饭类",
+      "name_ru": "Блюда с гарниром",
+      "note_ru": "Гарниры: рис, лапша",
+      "items": [
+        {
+          "code": "G1",
+          "name_cn": "孜然牛肉盖饭",
+          "name_ru": "Жареная говядина с тмином",
+          "weight": "850г",
+          "price": 22,
+          "image": "22.jpg"
+        },
+        {
+          "code": "G2",
+          "name_cn": "葱爆牛肉盖饭",
+          "name_ru": "Жареная говядина с луком",
+          "weight": "850г",
+          "price": 22,
+          "image": "23.jpg"
+        },
+        {
+          "code": "G3",
+          "name_cn": "牛肉滑蛋盖饭",
+          "name_ru": "Жареная говядина с яйцом",
+          "weight": "850г",
+          "price": 22,
+          "image": "24.jpg"
+        },
+        {
+          "code": "G4",
+          "name_cn": "黑椒牛肉盖饭",
+          "name_ru": "Говядина с черным перцем",
+          "weight": "850г",
+          "price": 22,
+          "image": "25.jpg"
+        },
+        {
+          "code": "G5",
+          "name_cn": "咖喱牛腩盖饭",
+          "name_ru": "Говяжья грудка карри",
+          "weight": "850г",
+          "price": 22,
+          "image": "26.jpg"
+        },
+        {
+          "code": "G6",
+          "name_cn": "土豆炖牛肉盖饭",
+          "name_ru": "Говядина тушеная с картофелем",
+          "weight": "850г",
+          "price": 22,
+          "image": "27.jpg"
+        },
+        {
+          "code": "G7",
+          "name_cn": "回锅肉盖饭",
+          "name_ru": "Хойгоу",
+          "weight": "850г",
+          "price": 19,
+          "image": "28.jpg"
+        },
+        {
+          "code": "G8",
+          "name_cn": "宫保鸡丁盖饭",
+          "name_ru": "Курица Гунбао",
+          "weight": "850г",
+          "price": 20,
+          "image": "29.jpg"
+        },
+        {
+          "code": "G9",
+          "name_cn": "红烧肉盖饭",
+          "name_ru": "Тушеная свиная грудинка",
+          "weight": "850г",
+          "price": 19,
+          "image": "30.jpg"
+        },
+        {
+          "code": "G10",
+          "name_cn": "鹌鹑蛋红烧肉盖饭",
+          "name_ru": "Тушеная свинина с яйцами",
+          "weight": "850г",
+          "price": 20,
+          "image": "41.jpg"
+        },
+        {
+          "code": "G11",
+          "name_cn": "过油肉盖饭",
+          "name_ru": "Мясо кунфи",
+          "weight": "850г",
+          "price": 20,
+          "image": "42.jpg"
+        },
+        {
+          "code": "G12",
+          "name_cn": "木须肉盖饭",
+          "name_ru": "Свинина Муси",
+          "weight": "550г",
+          "price": 19,
+          "image": "43.jpg"
+        },
+        {
+          "code": "G13",
+          "name_cn": "鱼香肉丝盖饭",
+          "name_ru": "Свинина Юйсянжоуси",
+          "weight": "850г",
+          "price": 18,
+          "image": "44.jpg"
+        },
+        {
+          "code": "G14",
+          "name_cn": "辣椒炒肉盖饭",
+          "name_ru": "Жареная свинина с перцем",
+          "weight": "850г",
+          "price": 22,
+          "image": "45.jpg"
+        },
+        {
+          "code": "G15",
+          "name_cn": "青椒肉丝盖饭",
+          "name_ru": "Жареная свинина с зеленым перцем",
+          "weight": "850г",
+          "price": 20,
+          "image": "46.jpg"
+        },
+        {
+          "code": "G16",
+          "name_cn": "肉末茄子盖饭",
+          "name_ru": "Баклажаны с фаршем",
+          "weight": "850г",
+          "price": 18,
+          "image": "47.jpg"
+        },
+        {
+          "code": "G17",
+          "name_cn": "耀肉片盖饭",
+          "name_ru": "Тушеные кусочки свинины",
+          "weight": "850г",
+          "price": 20,
+          "image": "48.jpg"
+        },
+        {
+          "code": "G18",
+          "name_cn": "土豆肉片盖饭",
+          "name_ru": "Жареное мясо с картофелем",
+          "weight": "850г",
+          "price": 19,
+          "image": "49.jpg"
+        },
+        {
+          "code": "G19",
+          "name_cn": "蘑菇炒肉盖饭",
+          "name_ru": "Жареное мясо с грибами",
+          "weight": "850г",
+          "price": 20,
+          "image": "51.jpg"
+        },
+        {
+          "code": "G20",
+          "name_cn": "农家一碗香盖饭",
+          "name_ru": "Яичница с перцем",
+          "weight": "850г",
+          "price": 19,
+          "image": "53.jpg"
+        },
+        {
+          "code": "G21",
+          "name_cn": "麻婆豆腐盖饭",
+          "name_ru": "Мапо Тофу",
+          "weight": "850г",
+          "price": 18,
+          "image": "55.jpg"
+        },
+        {
+          "code": "G22",
+          "name_cn": "茄辣西盖饭",
+          "name_ru": "Баклажаны с перцем и помидорами",
+          "weight": "850г",
+          "price": 18,
+          "image": "57.jpg"
+        },
+        {
+          "code": "G23",
+          "name_cn": "地三鲜盖饭",
+          "name_ru": "Три свежести",
+          "weight": "850г",
+          "price": 19,
+          "image": "59.jpg"
+        },
+        {
+          "code": "G24",
+          "name_cn": "尖椒炒鸡蛋盖饭",
+          "name_ru": "Яичница с перцем",
+          "weight": "850г",
+          "price": 14,
+          "image": "61.jpg"
+        },
+        {
+          "code": "G25",
+          "name_cn": "洋葱炒鸡蛋盖饭",
+          "name_ru": "Яичница с луком",
+          "weight": "850г",
+          "price": 14,
+          "image": "63.jpg"
+        },
+        {
+          "code": "G26",
+          "name_cn": "酸辣土豆丝盖饭",
+          "name_ru": "Остро-кислые картофельные соломки",
+          "weight": "850г",
+          "price": 12,
+          "image": "65.jpg"
+        },
+        {
+          "code": "G27",
+          "name_cn": "西红柿炒鸡蛋盖饭",
+          "name_ru": "Яичница с помидорами",
+          "weight": "850г",
+          "price": 14,
+          "image": "67.jpg"
+        },
+        {
+          "code": "G28",
+          "name_cn": "木耳鸡蛋炒肉丝盖饭",
+          "name_ru": "Свинина с древесными грибами",
+          "weight": "850г",
+          "price": 18,
+          "image": "74.jpg"
+        },
+        {
+          "code": "G29",
+          "name_cn": "豆芽肉丝盖饭",
+          "name_ru": "Ростки фасоли со свининой",
+          "weight": "850г",
+          "price": 18,
+          "image": "75.jpg"
+        },
+        {
+          "code": "G30",
+          "name_cn": "农家炒肉盖饭",
+          "name_ru": "Жареная свинина по-домашнему",
+          "weight": "850г",
+          "price": 20,
+          "image": "76.jpg"
+        },
+        {
+          "code": "G31",
+          "name_cn": "香辣肥牛拌饭",
+          "name_ru": "Острые ломтики говядины",
+          "weight": "850г",
+          "price": 22,
+          "image": "77.jpg"
+        },
+        {
+          "code": "G32",
+          "name_cn": "孜然肥牛拌饭",
+          "name_ru": "Ломтики говядины с тмином",
+          "weight": "850г",
+          "price": 22,
+          "image": "78.jpg"
+        },
+        {
+          "code": "G33",
+          "name_cn": "黑椒肥牛拌饭",
+          "name_ru": "Ломтики говядины с черным перцем",
+          "weight": "850г",
+          "price": 22,
+          "image": "79.jpg"
+        }
+      ]
+    },
+    {
+      "id": "O",
+      "name_cn": "特色菜",
+      "name_ru": "Фирменные блюда",
+      "items": [
+        {
+          "code": "O1",
+          "name_cn": "干锅鸡",
+          "name_ru": "Курица в сухом горшочке",
+          "weight": "800г",
+          "price": 32,
+          "image": "84.jpg"
+        },
+        {
+          "code": "O2",
+          "name_cn": "干锅鱼",
+          "name_ru": "Рыба в сухом горшочке",
+          "weight": "800г",
+          "price": 32,
+          "image": "86.jpg"
+        },
+        {
+          "code": "O3",
+          "name_cn": "干锅排骨",
+          "name_ru": "Ребрышки в сухом горшочке",
+          "weight": "800г",
+          "price": 32,
+          "image": "88.jpg"
+        },
+        {
+          "code": "O4",
+          "name_cn": "干锅肥肠",
+          "name_ru": "Жареные кишки в сухом горшочке",
+          "weight": "800г",
+          "price": 32,
+          "image": "90.jpg"
+        },
+        {
+          "code": "O5",
+          "name_cn": "干锅菜花",
+          "name_ru": "Цветная капуста в сухом горшочке",
+          "weight": "800г",
+          "price": 32,
+          "image": "93.jpg"
+        },
+        {
+          "code": "O6",
+          "name_cn": "干锅土豆片",
+          "name_ru": "Картофель в сухом горшочке",
+          "weight": "800г",
+          "price": 18,
+          "image": "94.jpg"
+        },
+        {
+          "code": "O7",
+          "name_cn": "大盘鸡",
+          "name_ru": "Жареный цыпленок с картофелем",
+          "weight": "3000г",
+          "price": 48,
+          "image": "95.jpg"
+        },
+        {
+          "code": "O8",
+          "name_cn": "红烧鱼",
+          "name_ru": "Тушеная рыба",
+          "weight": "1200г",
+          "price": 38,
+          "image": "96.jpg"
+        },
+        {
+          "code": "O9",
+          "name_cn": "酸菜鱼",
+          "name_ru": "Рыба с квашеной капустой",
+          "weight": "1200г",
+          "price": 38,
+          "image": "99.jpg"
+        },
+        {
+          "code": "O10",
+          "name_cn": "水煮鱼",
+          "name_ru": "Отварная рыба в остром соусе",
+          "weight": "1200г",
+          "price": 38,
+          "image": "104.jpg"
+        },
+        {
+          "code": "O11",
+          "name_cn": "烤鱼",
+          "name_ru": "Жареная рыба по-китайски острая",
+          "weight": "3000г",
+          "price": 68,
+          "image": "105.jpg"
+        },
+        {
+          "code": "O12",
+          "name_cn": "水煮肉片",
+          "name_ru": "Отварная свинина в остром соусе",
+          "weight": "1200г",
+          "price": 38,
+          "image": "106.jpg"
+        },
+        {
+          "code": "O13",
+          "name_cn": "水煮牛肉",
+          "name_ru": "Отварная говядина в остром соусе",
+          "weight": "1200г",
+          "price": 40,
+          "image": "107.jpg"
+        },
+        {
+          "code": "O14",
+          "name_cn": "甘肃炒肉片",
+          "name_ru": "Ломтики мяса Ганьсу (говядина)",
+          "weight": "500г",
+          "price": 42,
+          "image": "108.jpg"
+        }
+      ]
+    },
+    {
+      "id": "L",
+      "name_cn": "凉菜",
+      "name_ru": "Холодные блюда",
+      "items": [
+        {
+          "code": "L1",
+          "name_cn": "口水鸡",
+          "name_ru": "Острая холодная курица",
+          "weight": "500г",
+          "price": 20,
+          "image": "116.jpg"
+        },
+        {
+          "code": "L2",
+          "name_cn": "椒麻鸡",
+          "name_ru": "Острый куриный салат",
+          "weight": "450г",
+          "price": 24,
+          "image": "117.jpg"
+        },
+        {
+          "code": "L3",
+          "name_cn": "凉拌酱牛肉",
+          "name_ru": "Говядина в чесночном соусе",
+          "weight": "400г",
+          "price": 26,
+          "image": "118.jpg"
+        },
+        {
+          "code": "L4",
+          "name_cn": "牛肉拌黄瓜",
+          "name_ru": "Салат из говядины и огурцов",
+          "weight": "400г",
+          "price": 24,
+          "image": "119.jpg"
+        },
+        {
+          "code": "L5",
+          "name_cn": "拍黄瓜",
+          "name_ru": "Битые огурцы с чесноком",
+          "weight": "400г",
+          "price": 12,
+          "image": "120.jpg"
+        },
+        {
+          "code": "L6",
+          "name_cn": "凉拌木耳",
+          "name_ru": "Холодный салат из древесных грибов",
+          "weight": "400г",
+          "price": 14,
+          "image": "121.jpg"
+        },
+        {
+          "code": "L7",
+          "name_cn": "油炸花生米",
+          "name_ru": "Жареный арахис",
+          "weight": "240г",
+          "price": 12,
+          "image": "122.jpg"
+        },
+        {
+          "code": "L8",
+          "name_cn": "拌三丝",
+          "name_ru": "Салат из овощей и тофу",
+          "weight": "400г",
+          "price": 16,
+          "image": "123.jpg"
+        }
+      ]
+    },
+    {
+      "id": "J",
+      "name_cn": "鸡肉",
+      "name_ru": "Блюда из курицы",
+      "items": [
+        {
+          "code": "J1",
+          "name_cn": "宫保鸡丁",
+          "name_ru": "Курица Гунбао",
+          "weight": "600г",
+          "price": 32,
+          "image": "126.jpg"
+        },
+        {
+          "code": "J2",
+          "name_cn": "辣子鸡",
+          "name_ru": "Острые кусочки курицы",
+          "weight": "400г",
+          "price": 26,
+          "image": "128.jpg"
+        },
+        {
+          "code": "J3",
+          "name_cn": "生炒鸡",
+          "name_ru": "Жареная курица с чесноком",
+          "weight": "600г",
+          "price": 24,
+          "image": "129.jpg"
+        },
+        {
+          "code": "J4",
+          "name_cn": "糖醋鸡柳",
+          "name_ru": "Куриное филе в кисло-сладком соусе",
+          "weight": "600г",
+          "price": 26,
+          "image": "130.jpg"
+        },
+        {
+          "code": "J5",
+          "name_cn": "孜然琵琶腿",
+          "name_ru": "Куриные ножки со специями",
+          "weight": "600г",
+          "price": 24,
+          "image": "131.jpg"
+        },
+        {
+          "code": "J6",
+          "name_cn": "千炸小鸡腿",
+          "name_ru": "Куриные ножки жареные",
+          "weight": "600г",
+          "price": 24,
+          "image": "132.jpg"
+        },
+        {
+          "code": "J7",
+          "name_cn": "五香吮指翅",
+          "name_ru": "Куриные крылышки со специями",
+          "weight": "600г",
+          "price": 24,
+          "image": "133.jpg"
+        }
+      ]
+    },
+    {
+      "id": "Z",
+      "name_cn": "猪肉",
+      "name_ru": "Блюда из свинины",
+      "items": [
+        {
+          "code": "Z1",
+          "name_cn": "锅包肉",
+          "name_ru": "Гобаожоу",
+          "weight": "600г",
+          "price": 28,
+          "image": "138.jpg"
+        },
+        {
+          "code": "Z2",
+          "name_cn": "木须肉",
+          "name_ru": "Свинина Муси",
+          "weight": "600г",
+          "price": 24,
+          "image": "144.jpg"
+        },
+        {
+          "code": "Z3",
+          "name_cn": "青椒肉丝",
+          "name_ru": "Жареная свинина с зеленым перцем",
+          "weight": "600г",
+          "price": 26,
+          "image": "145.jpg"
+        },
+        {
+          "code": "Z4",
+          "name_cn": "鱼香肉丝",
+          "name_ru": "Жареная свинина Юйсянжоуси",
+          "weight": "600г",
+          "price": 26,
+          "image": "146.jpg"
+        },
+        {
+          "code": "Z5",
+          "name_cn": "回锅肉",
+          "name_ru": "Хойгоу",
+          "weight": "600г",
+          "price": 26,
+          "image": "147.jpg"
+        },
+        {
+          "code": "Z6",
+          "name_cn": "糖醋里脊",
+          "name_ru": "Свиное филе в кисло-сладком соусе",
+          "weight": "600г",
+          "price": 28,
+          "image": "148.jpg"
+        },
+        {
+          "code": "Z7",
+          "name_cn": "菠萝咕咾肉",
+          "name_ru": "Жареные кусочки свинины с ананасами",
+          "weight": "600г",
+          "price": 30,
+          "image": "149.jpg"
+        },
+        {
+          "code": "Z8",
+          "name_cn": "小酥肉",
+          "name_ru": "Жареные свиные ребрышки",
+          "weight": "350г",
+          "price": 24,
+          "image": "150.jpg"
+        },
+        {
+          "code": "Z9",
+          "name_cn": "溜肥肠",
+          "name_ru": "Тушеные свиные кишки",
+          "weight": "600г",
+          "price": 30,
+          "image": "155.jpg"
+        },
+        {
+          "code": "Z10",
+          "name_cn": "辣椒炒肉",
+          "name_ru": "Жареная свинина с перцем чили",
+          "weight": "600г",
+          "price": 30,
+          "image": "159.jpg"
+        },
+        {
+          "code": "Z11",
+          "name_cn": "糖醋排骨",
+          "name_ru": "Свиные ребрышки в кисло-сладком соусе",
+          "weight": "600г",
+          "price": 26,
+          "image": "160.jpg"
+        },
+        {
+          "code": "Z12",
+          "name_cn": "椒盐排骨",
+          "name_ru": "Жареные свиные ребрышки с солью и перцем",
+          "weight": "600г",
+          "price": 26,
+          "image": "161.jpg"
+        },
+        {
+          "code": "Z13",
+          "name_cn": "红烧排骨",
+          "name_ru": "Тушеные свиные ребрышки",
+          "weight": "600г",
+          "price": 26,
+          "image": "162.jpg"
+        },
+        {
+          "code": "Z14",
+          "name_cn": "红烧肉",
+          "name_ru": "Тушеная свиная грудинка",
+          "weight": "600г",
+          "price": 28,
+          "image": "163.jpg"
+        },
+        {
+          "code": "Z15",
+          "name_cn": "农家小炒肉",
+          "name_ru": "Жареная свинина по-домашнему",
+          "weight": "600г",
+          "price": 26,
+          "image": "164.jpg"
+        }
+      ]
+    },
+    {
+      "id": "S",
+      "name_cn": "素菜",
+      "name_ru": "Вегетарианские блюда",
+      "items": [
+        {
+          "code": "S1",
+          "name_cn": "地三鲜",
+          "name_ru": "Три свежести",
+          "weight": "550г",
+          "price": 25,
+          "image": "166.jpg"
+        },
+        {
+          "code": "S2",
+          "name_cn": "家常豆腐",
+          "name_ru": "Тофу по-домашнему",
+          "weight": "550г",
+          "price": 18,
+          "image": "167.jpg"
+        },
+        {
+          "code": "S3",
+          "name_cn": "尖椒干豆腐",
+          "name_ru": "Жареный тофу с перцем",
+          "weight": "550г",
+          "price": 22,
+          "image": "168.jpg"
+        },
+        {
+          "code": "S4",
+          "name_cn": "麻婆豆腐",
+          "name_ru": "Мапо Тофу",
+          "weight": "550г",
+          "price": 20,
+          "image": "169.jpg"
+        },
+        {
+          "code": "S5",
+          "name_cn": "鱼香茄子",
+          "name_ru": "Баклажаны в кисло-сладком соусе",
+          "weight": "550г",
+          "price": 25,
+          "image": "170.jpg"
+        },
+        {
+          "code": "S6",
+          "name_cn": "蒜蓉油麦菜",
+          "name_ru": "Салат с чесноком",
+          "weight": "550г",
+          "price": 24,
+          "image": "171.jpg"
+        },
+        {
+          "code": "S7",
+          "name_cn": "蒜蓉西兰花",
+          "name_ru": "Брокколи с чесноком",
+          "weight": "550г",
+          "price": 24,
+          "image": "172.jpg"
+        },
+        {
+          "code": "S8",
+          "name_cn": "酸辣土豆丝",
+          "name_ru": "Кисло-острый картофель",
+          "weight": "550г",
+          "price": 12,
+          "image": "173.jpg"
+        },
+        {
+          "code": "S9",
+          "name_cn": "手撕莲花白",
+          "name_ru": "Жареная капуста",
+          "weight": "550г",
+          "price": 14,
+          "image": "174.jpg"
+        },
+        {
+          "code": "S10",
+          "name_cn": "黑白菜",
+          "name_ru": "Капуста с грибами",
+          "weight": "550г",
+          "price": 14,
+          "image": "175.jpg"
+        },
+        {
+          "code": "S11",
+          "name_cn": "西红柿炒鸡蛋",
+          "name_ru": "Яичница с помидорами",
+          "weight": "550г",
+          "price": 15,
+          "image": "176.jpg"
+        },
+        {
+          "code": "S12",
+          "name_cn": "酸辣大白菜",
+          "name_ru": "Остро-кислая жареная капуста",
+          "weight": "550г",
+          "price": 14,
+          "image": "177.jpg"
+        },
+        {
+          "code": "S13",
+          "name_cn": "松仁玉米",
+          "name_ru": "Кукуруза с кедровыми орешками",
+          "weight": "550г",
+          "price": 20,
+          "image": "178.jpg"
+        },
+        {
+          "code": "S14",
+          "name_cn": "蒜香烧茄子",
+          "name_ru": "Баклажаны со вкусом чеснока",
+          "weight": "550г",
+          "price": 25,
+          "image": "179.jpg"
+        },
+        {
+          "code": "S15",
+          "name_cn": "千炸蘑菇",
+          "name_ru": "Жареные грибы",
+          "weight": "300г",
+          "price": 16,
+          "image": "180.jpg"
+        },
+        {
+          "code": "S16",
+          "name_cn": "白菜豆腐粉丝煲",
+          "name_ru": "Капуста, тофу с фунчозой",
+          "weight": "800г",
+          "price": 16,
+          "image": "181.jpg"
+        }
+      ]
+    },
+    {
+      "id": "N",
+      "name_cn": "牛肉",
+      "name_ru": "Блюда из говядины",
+      "items": [
+        {
+          "code": "N1",
+          "name_cn": "小炒牛肉",
+          "name_ru": "Жареная говядина",
+          "weight": "450г",
+          "price": 32,
+          "image": "184.jpg"
+        },
+        {
+          "code": "N2",
+          "name_cn": "葱爆牛肉",
+          "name_ru": "Жареная говядина с луком",
+          "weight": "450г",
+          "price": 32,
+          "image": "185.jpg"
+        },
+        {
+          "code": "N3",
+          "name_cn": "孜然牛肉",
+          "name_ru": "Жареная говядина с тмином",
+          "weight": "450г",
+          "price": 32,
+          "image": "186.jpg"
+        },
+        {
+          "code": "N4",
+          "name_cn": "番茄牛腩煲",
+          "name_ru": "Говядина с томатами",
+          "weight": "500г",
+          "price": 34,
+          "image": "187.jpg"
+        },
+        {
+          "code": "N5",
+          "name_cn": "麻辣牛腩煲",
+          "name_ru": "Острая говядина в горшочке",
+          "weight": "500г",
+          "price": 34,
+          "image": "188.jpg"
+        },
+        {
+          "code": "N6",
+          "name_cn": "咖喱牛腩煲",
+          "name_ru": "Говядина карри в горшочке",
+          "weight": "500г",
+          "price": 30,
+          "image": "189.jpg"
+        },
+        {
+          "code": "N7",
+          "name_cn": "土豆烧牛肉",
+          "name_ru": "Говядина тушеная с картофелем",
+          "weight": "500г",
+          "price": 38,
+          "image": "190.jpg"
+        },
+        {
+          "code": "N8",
+          "name_cn": "酸汤肥牛",
+          "name_ru": "Кислый суп с говядиной",
+          "weight": "800г",
+          "price": 38,
+          "image": "191.jpg"
+        }
+      ]
+    },
+    {
+      "id": "T",
+      "name_cn": "汤",
+      "name_ru": "Суп",
+      "items": [
+        {
+          "code": "T1",
+          "name_cn": "西红柿鸡蛋汤",
+          "name_ru": "Томатно-яичный суп",
+          "weight": "1400г",
+          "price": 14,
+          "image": "196.jpg"
+        },
+        {
+          "code": "T2",
+          "name_cn": "紫菜蛋花汤",
+          "name_ru": "Суп из водорослей и яиц",
+          "weight": "1400г",
+          "price": 14,
+          "image": "197.jpg"
+        },
+        {
+          "code": "T3",
+          "name_cn": "鸡蛋玉米汤",
+          "name_ru": "Суп из яиц и кукурузы",
+          "weight": "1400г",
+          "price": 14,
+          "image": "198.jpg"
+        },
+        {
+          "code": "T4",
+          "name_cn": "西湖牛肉汤",
+          "name_ru": "Суп с говядиной и яйцом",
+          "weight": "1400г",
+          "price": 16,
+          "image": "199.jpg"
+        }
+      ]
+    },
+    {
+      "id": "F",
+      "name_cn": "主食",
+      "name_ru": "Блюда из риса и муки",
+      "items": [
+        {
+          "code": "F1",
+          "name_cn": "米饭",
+          "name_ru": "Рис",
+          "weight": null,
+          "price": 2.5,
+          "image": "204.jpg"
+        },
+        {
+          "code": "F2",
+          "name_cn": "什锦炒饭",
+          "name_ru": "Китайский плов",
+          "weight": "500г",
+          "price": 8,
+          "image": "205.jpg"
+        },
+        {
+          "code": "F3",
+          "name_cn": "馒头/花卷",
+          "name_ru": "Паровая булочка",
+          "weight": null,
+          "price": 1,
+          "image": "206.jpg"
+        },
+        {
+          "code": "F14",
+          "name_cn": "炸酱面",
+          "name_ru": "Чаджамьен",
+          "weight": "700г",
+          "price": 16,
+          "image": "214.jpg"
+        },
+        {
+          "code": "F15",
+          "name_cn": "麻辣牛肉面",
+          "name_ru": "Лапша с тушеной говядиной",
+          "weight": "700г",
+          "price": 18,
+          "image": "215.jpg"
+        },
+        {
+          "code": "F16",
+          "name_cn": "肥肠面",
+          "name_ru": "Лапша со свиными кишками",
+          "weight": "700г",
+          "price": 18,
+          "image": "216.jpg"
+        },
+        {
+          "code": "F17",
+          "name_cn": "油泼面",
+          "name_ru": "Лапша политая маслом",
+          "weight": "700г",
+          "price": 16,
+          "image": "217.jpg"
+        },
+        {
+          "code": "F18",
+          "name_cn": "西北炒面",
+          "name_ru": "Китайская жареная лапша",
+          "weight": "700г",
+          "price": 18,
+          "image": "218.jpg"
+        },
+        {
+          "code": "F19",
+          "name_cn": "肉丝炒面",
+          "name_ru": "Жареная лапша со свининой",
+          "weight": "700г",
+          "price": 18,
+          "image": "219.jpg"
+        },
+        {
+          "code": "F20",
+          "name_cn": "鸡蛋炒面",
+          "name_ru": "Жареная лапша с яйцом",
+          "weight": "700г",
+          "price": 16,
+          "image": "220.jpg"
+        }
+      ]
+    }
+  ]
+}
