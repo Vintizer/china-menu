@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import useCartStore from '../store/cartStore.js'
 import useT from '../hooks/useT.js'
@@ -71,6 +71,7 @@ export default function Checkout() {
   })
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState({})
+  const navigatedToConfirmation = useRef(false)
 
   const FIELDS = [
     { key: 'name',    label: T.fieldName,    placeholder: T.phName,    icon: '👤', type: 'text', required: true },
@@ -99,6 +100,7 @@ export default function Checkout() {
       const message = formatOrderMessage(form, items)
       await sendOrderToTelegram(message)
       clearCart()
+      navigatedToConfirmation.current = true
       navigate('/confirmation')
     } catch (e) {
       console.error(e)
@@ -109,7 +111,7 @@ export default function Checkout() {
   }
 
   if (items.length === 0) {
-    navigate('/')
+    if (!navigatedToConfirmation.current) navigate('/')
     return null
   }
 
