@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import useCartStore from '../store/cartStore.js'
+import useLangStore from '../store/langStore.js'
+import useT from '../hooks/useT.js'
 import DishImage from './DishImage.jsx'
 
 export default function DishCard({ dish, style }) {
@@ -8,6 +10,10 @@ export default function DishCard({ dish, style }) {
   const updateQuantity = useCartStore(s => s.updateQuantity)
   const cartItem = items.find(i => i.code === dish.code)
   const [added, setAdded] = useState(false)
+  const lang = useLangStore(s => s.lang)
+  const T = useT()
+
+  const name = lang === 'ru' ? dish.name_ru : dish.name_cn
 
   const handleAdd = () => {
     addItem(dish)
@@ -21,7 +27,7 @@ export default function DishCard({ dish, style }) {
         <DishImage
           src={dish.image}
           code={dish.code}
-          alt={dish.name_ru}
+          alt={name}
           className="w-full h-44 object-cover"
         />
         {dish.isBestSeller && (
@@ -32,15 +38,16 @@ export default function DishCard({ dish, style }) {
       </div>
 
       <div className="p-4">
-        <p className="text-red text-xs cn-text mb-0.5">{dish.name_cn}</p>
-        <h3 className="font-bold text-ink text-base leading-snug">{dish.name_ru}</h3>
+        <h3 className={`font-bold text-ink text-base leading-snug ${lang === 'cn' ? 'cn-text' : ''}`}>
+          {name}
+        </h3>
 
         <div className="flex items-end justify-between mt-3 gap-2">
           <div>
             {dish.weight && (
               <p className="text-gray-400 text-xs mb-1">{dish.weight}</p>
             )}
-            <p className="font-black text-red text-xl leading-none">{dish.price} р</p>
+            <p className="font-black text-red text-xl leading-none">{dish.price} {T.currency}</p>
           </div>
 
           {cartItem ? (
@@ -76,7 +83,7 @@ export default function DishCard({ dish, style }) {
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
                     <path d="M20 6L9 17l-5-5" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
-                  Добавлено
+                  {T.added}
                 </>
               ) : (
                 <>
@@ -85,7 +92,7 @@ export default function DishCard({ dish, style }) {
                     <line x1="3" y1="6" x2="21" y2="6" stroke="white" strokeWidth="2.5" strokeLinecap="round" />
                     <path d="M16 10a4 4 0 01-8 0" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
-                  В корзину
+                  {T.addToCart}
                 </>
               )}
             </button>

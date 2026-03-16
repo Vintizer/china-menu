@@ -9,8 +9,11 @@ export function useMenu() {
 
   useEffect(() => {
     if (cachedMenu) return
-    fetch('/menu.json')
-      .then(r => r.json())
+    fetch('/api/menu')
+      .then(r => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`)
+        return r.json()
+      })
       .then(data => {
         cachedMenu = data
         setMenu(data)

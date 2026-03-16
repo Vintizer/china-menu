@@ -1,11 +1,13 @@
 import { useNavigate } from 'react-router-dom'
 import useCartStore from '../store/cartStore.js'
+import useT from '../hooks/useT.js'
 
 export default function CartBar() {
   const navigate = useNavigate()
   const items = useCartStore(s => s.items)
   const totalCount = items.reduce((s, i) => s + i.quantity, 0)
   const totalPrice = items.reduce((s, i) => s + i.price * i.quantity, 0)
+  const T = useT()
 
   if (totalCount === 0) return null
 
@@ -29,11 +31,11 @@ export default function CartBar() {
               {totalCount}
             </span>
           </div>
-          <span className="font-bold text-base">Корзина</span>
+          <span className="font-bold text-base">{T.cartLabel}</span>
         </div>
         <div className="text-right">
           <p className="text-xs text-white/70 leading-none">Total</p>
-          <p className="font-black text-lg leading-tight">{totalPrice} р</p>
+          <p className="font-black text-lg leading-tight">{totalPrice} {T.currency}</p>
         </div>
       </button>
     </div>

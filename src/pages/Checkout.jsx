@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import useCartStore from '../store/cartStore.js'
+import useT from '../hooks/useT.js'
 import Header from '../components/Header.jsx'
 
 function formatOrderMessage({ name, phone, address, comment, payment }, items) {
@@ -47,17 +48,11 @@ async function sendOrderToTelegram(message) {
   return true
 }
 
-const FIELDS = [
-  { key: 'name',    label: 'Ваше имя',          placeholder: 'Иван Иванов',            icon: '👤', type: 'text',  required: true },
-  { key: 'phone',   label: 'Телефон',            placeholder: '+375 29 000-00-00',       icon: '📞', type: 'tel',   required: true },
-  { key: 'address', label: 'Адрес доставки',     placeholder: 'Улица, дом, квартира',    icon: '🏠', type: 'text',  required: true },
-  { key: 'comment', label: 'Комментарий к заказу', placeholder: 'Напишите пожелания...',  icon: '💬', type: 'text',  required: false, multiline: true },
-]
-
 export default function Checkout() {
   const navigate = useNavigate()
   const items = useCartStore(s => s.items)
   const clearCart = useCartStore(s => s.clearCart)
+  const T = useT()
   const total = items.reduce((s, i) => s + i.price * i.quantity, 0)
   const count = items.reduce((s, i) => s + i.quantity, 0)
 
@@ -73,11 +68,18 @@ export default function Checkout() {
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState({})
 
+  const FIELDS = [
+    { key: 'name',    label: T.fieldName,    placeholder: T.phName,    icon: '👤', type: 'text', required: true },
+    { key: 'phone',   label: T.fieldPhone,   placeholder: T.phPhone,   icon: '📞', type: 'tel',  required: true },
+    { key: 'address', label: T.fieldAddress, placeholder: T.phAddress, icon: '🏠', type: 'text', required: true },
+    { key: 'comment', label: T.fieldComment, placeholder: T.phComment, icon: '💬', type: 'text', required: false, multiline: true },
+  ]
+
   const validate = () => {
     const errs = {}
-    if (!form.name.trim())    errs.name    = 'Введите имя'
-    if (!form.phone.trim())   errs.phone   = 'Введите телефон'
-    if (!form.address.trim()) errs.address = 'Введите адрес'
+    if (!form.name.trim())    errs.name    = T.errName
+    if (!form.phone.trim())   errs.phone   = T.errPhone
+    if (!form.address.trim()) errs.address = T.errAddress
     return errs
   }
 
@@ -96,7 +98,7 @@ export default function Checkout() {
       navigate('/confirmation')
     } catch (e) {
       console.error(e)
-      alert('Ошибка отправки. Попробуйте ещё раз или позвоните нам.')
+      alert(T.orderError)
     } finally {
       setLoading(false)
     }
@@ -109,7 +111,7 @@ export default function Checkout() {
 
   return (
     <div className="min-h-dvh bg-warm pb-6">
-      <Header title="Оформление заказа" />
+      <Header title={T.checkoutTitle} />
 
       <div className="px-4 pt-4 flex flex-col gap-4">
         {/* Order summary */}
@@ -118,11 +120,11 @@ export default function Checkout() {
             🍽
           </div>
           <div>
-            <p className="text-gray-500 text-xs">Ваш заказ</p>
+            <p className="text-gray-500 text-xs">{T.yourOrder}</p>
             <p className="font-bold text-ink">
-              {count} {count === 1 ? 'позиция' : count < 5 ? 'позиции' : 'позиций'}
+              {T.positions(count)}
               {' '}•{' '}
-              <span className="text-red">{total} р</span>
+              <span className="text-red">{total} {T.currency}</span>
             </p>
           </div>
         </div>
@@ -131,7 +133,7 @@ export default function Checkout() {
         <div>
           <div className="flex items-center gap-2 mb-3">
             <div className="w-1 h-5 bg-red rounded-full" />
-            <h2 className="font-bold text-ink text-base">Контактные данные</h2>
+            <h2 className="font-bold text-ink text-base">{T.contactInfo}</h2>
           </div>
 
           <div className="flex flex-col gap-3">
@@ -179,12 +181,12 @@ export default function Checkout() {
         <div>
           <div className="flex items-center gap-2 mb-3">
             <div className="w-1 h-5 bg-red rounded-full" />
-            <h2 className="font-bold text-ink text-base">Способ оплаты</h2>
+            <h2 className="font-bold text-ink text-base">{T.paymentMethod}</h2>
           </div>
           <div className="grid grid-cols-2 gap-2">
             {[
-              { id: 'cash', label: 'Наличные', icon: '💵' },
-              { id: 'card', label: 'Картой',   icon: '💳' },
+              { id: 'cash', label: T.cash, icon: '💵' },
+              { id: 'card', label: T.card, icon: '💳' },
             ].map(opt => (
               <button
                 key={opt.id}
@@ -215,8 +217,8 @@ export default function Checkout() {
             </svg>
           ) : (
             <>
-              Отправить заказ
-              <span className="ml-auto font-black text-lg">{total} р</span>
+              {T.sendOrder}
+              <span className="ml-auto font-black text-lg">{total} {T.currency}</span>
             </>
           )}
         </button>

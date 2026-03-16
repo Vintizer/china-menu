@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import LangToggle from './LangToggle.jsx'
 
 export default function Header({ title, subtitle, onBack, rightIcon, onRight, transparent }) {
   const navigate = useNavigate()
@@ -31,17 +32,20 @@ export default function Header({ title, subtitle, onBack, rightIcon, onRight, tr
         )}
       </div>
 
-      {rightIcon ? (
-        <button
-          onClick={onRight}
-          className="w-9 h-9 rounded-full bg-white shadow-card flex items-center justify-center flex-shrink-0 active:scale-90 transition-transform"
-          aria-label="Действие"
-        >
-          {rightIcon}
-        </button>
-      ) : (
-        <div className="w-9 flex-shrink-0" />
-      )}
+      <div className="flex items-center gap-1.5 flex-shrink-0">
+        <LangToggle />
+        {rightIcon ? (
+          <button
+            onClick={onRight}
+            className="w-9 h-9 rounded-full bg-white shadow-card flex items-center justify-center active:scale-90 transition-transform"
+            aria-label="Действие"
+          >
+            {rightIcon}
+          </button>
+        ) : (
+          <div className="w-9" />
+        )}
+      </div>
     </header>
   )
 }

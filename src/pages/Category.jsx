@@ -1,6 +1,8 @@
 import { useParams, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { useMenu, getCategoryById } from '../hooks/useMenu.js'
+import useLangStore from '../store/langStore.js'
+import useT from '../hooks/useT.js'
 import Header from '../components/Header.jsx'
 import DishCard from '../components/DishCard.jsx'
 import CartBar from '../components/CartBar.jsx'
@@ -11,14 +13,25 @@ export default function Category() {
   const { menu, loading } = useMenu()
   const [search, setSearch] = useState('')
   const [showSearch, setShowSearch] = useState(false)
+  const lang = useLangStore(s => s.lang)
+  const T = useT()
 
   const category = getCategoryById(menu, id)
+
+  const note = lang === 'ru' ? category?.note_ru : (category?.note_cn ?? category?.note_ru)
 
   const filteredItems = (category?.items ?? []).filter(item => {
     if (!search) return true
     const q = search.toLowerCase()
-    return item.name_ru.toLowerCase().includes(q) || item.name_cn.includes(q)
+    return (
+      (item.name_ru ?? '').toLowerCase().includes(q) ||
+      (item.name_cn ?? '').includes(q)
+    )
   })
+
+  const title = category
+    ? lang === 'ru' ? category.name_ru : category.name_cn
+    : T.loading
 
   const SearchIcon = (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
@@ -30,17 +43,16 @@ export default function Category() {
   return (
     <div className="min-h-dvh bg-warm pb-28">
       <Header
-        title={category?.name_ru ?? 'Загрузка...'}
-        subtitle={category?.name_cn}
+        title={title}
         rightIcon={SearchIcon}
         onRight={() => setShowSearch(v => !v)}
       />
 
       {/* Note for category */}
-      {category?.note_ru && (
+      {note && (
         <div className="mx-4 mt-3 px-4 py-2.5 bg-gold-light rounded-xl border border-gold/30 flex items-center gap-2">
           <span className="text-gold text-lg">ℹ️</span>
-          <p className="text-sm text-ink/70">{category.note_ru}</p>
+          <p className="text-sm text-ink/70">{note}</p>
         </div>
       )}
 
@@ -50,7 +62,7 @@ export default function Category() {
           <input
             autoFocus
             type="text"
-            placeholder="Поиск блюда..."
+            placeholder={T.searchPlaceholder}
             value={search}
             onChange={e => setSearch(e.target.value)}
             className="input-field text-sm"
@@ -67,7 +79,8 @@ export default function Category() {
         ) : filteredItems.length === 0 ? (
           <div className="text-center py-16 text-gray-400">
             <p className="text-4xl mb-3">🔍</p>
-            <p className="font-semibold">Ничего не найдено</p>
+            <p className="font-semibold">{T.notFound}</p>
+            <p className="text-sm mt-1">{T.notFoundSub}</p>
           </div>
         ) : (
           filteredItems.map((dish, i) => (

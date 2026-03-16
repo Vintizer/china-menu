@@ -1,20 +1,24 @@
 import { useNavigate } from 'react-router-dom'
+import useLangStore from '../store/langStore.js'
 
 const CATEGORY_ICONS = {
-  G: { icon: '🍱', label: '盖饭' },
-  O: { icon: '⭐', label: '特色' },
-  L: { icon: '🥗', label: '凉菜' },
-  J: { icon: '🍗', label: '鸡肉' },
-  Z: { icon: '🥩', label: '猪肉' },
-  S: { icon: '🥦', label: '素菜' },
-  N: { icon: '🐂', label: '牛肉' },
-  T: { icon: '🍜', label: '汤' },
-  F: { icon: '🍚', label: '主食' },
+  G: { icon: '🍱' },
+  O: { icon: '⭐' },
+  L: { icon: '🥗' },
+  J: { icon: '🍗' },
+  Z: { icon: '🥩' },
+  S: { icon: '🥦' },
+  N: { icon: '🐂' },
+  T: { icon: '🍜' },
+  F: { icon: '🍚' },
 }
 
 export default function CategoryCard({ category, style }) {
   const navigate = useNavigate()
-  const { icon } = CATEGORY_ICONS[category.id] ?? { icon: '🍽', label: category.name_cn }
+  const lang = useLangStore(s => s.lang)
+  const { icon } = CATEGORY_ICONS[category.id] ?? { icon: '🍽' }
+
+  const name = lang === 'ru' ? category.name_ru : category.name_cn
 
   return (
     <button
@@ -27,8 +31,9 @@ export default function CategoryCard({ category, style }) {
         {icon}
       </div>
       <div className="text-center">
-        <p className="cn-text font-bold text-ink text-sm leading-snug">{category.name_cn}</p>
-        <p className="text-gray-500 text-xs mt-0.5 leading-snug">{category.name_ru}</p>
+        <p className={`font-bold text-ink text-sm leading-snug ${lang === 'cn' ? 'cn-text' : ''}`}>
+          {name}
+        </p>
       </div>
     </button>
   )

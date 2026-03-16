@@ -1,11 +1,14 @@
 import { useNavigate } from 'react-router-dom'
 import { useMenu } from '../hooks/useMenu.js'
+import useT from '../hooks/useT.js'
 import CategoryCard from '../components/CategoryCard.jsx'
 import CartBar from '../components/CartBar.jsx'
+import LangToggle from '../components/LangToggle.jsx'
 
 export default function Home() {
   const navigate = useNavigate()
   const { menu, loading } = useMenu()
+  const T = useT()
 
   return (
     <div className="min-h-dvh pattern-bg pb-28">
@@ -21,14 +24,16 @@ export default function Home() {
           </div>
         </div>
         <div className="flex items-center gap-2">
+          <LangToggle />
           <button
             onClick={() => navigate('/cart')}
             className="w-9 h-9 rounded-full bg-white shadow-card flex items-center justify-center active:scale-90 transition-transform"
-            aria-label="Поиск"
+            aria-label="Корзина"
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-              <circle cx="11" cy="11" r="8" stroke="#D62828" strokeWidth="2" />
-              <path d="M21 21l-4.35-4.35" stroke="#D62828" strokeWidth="2" strokeLinecap="round" />
+              <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke="#D62828" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <line x1="3" y1="6" x2="21" y2="6" stroke="#D62828" strokeWidth="2" strokeLinecap="round" />
+              <path d="M16 10a4 4 0 01-8 0" stroke="#D62828" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </button>
         </div>
@@ -40,7 +45,7 @@ export default function Home() {
         <p className="text-gold font-bold text-xs tracking-[0.25em] uppercase mt-2">Chinese Restaurant</p>
         <div className="flex items-center justify-center gap-3 mt-3">
           <div className="h-px bg-gold/40 flex-1" />
-          <span className="text-ink font-bold text-sm">Меню</span>
+          <span className="text-ink font-bold text-sm">{T.heroTitle}</span>
           <div className="h-px bg-gold/40 flex-1" />
         </div>
       </div>
@@ -73,13 +78,13 @@ export default function Home() {
             餐
           </div>
           <div className="relative z-10">
-            <p className="cn-text text-white font-bold text-lg leading-tight">今日推荐</p>
-            <p className="text-white/80 text-xs">Special Offer for Today</p>
+            <p className="cn-text text-white font-bold text-lg leading-tight">{T.todaySpecial}</p>
+            <p className="text-white/80 text-xs">{T.todaySpecialSub}</p>
             <button
               onClick={() => navigate('/category/O')}
               className="mt-2 bg-white text-red text-xs font-bold px-3 py-1.5 rounded-full active:scale-95 transition-transform"
             >
-              查看详情
+              {T.viewDetails}
             </button>
           </div>
         </div>

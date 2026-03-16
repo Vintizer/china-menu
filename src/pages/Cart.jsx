@@ -1,5 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import useCartStore from '../store/cartStore.js'
+import useT from '../hooks/useT.js'
+import LangToggle from '../components/LangToggle.jsx'
 import CartItemRow from '../components/CartItemRow.jsx'
 
 const TrashIcon = (
@@ -15,6 +17,7 @@ export default function Cart() {
   const navigate = useNavigate()
   const items = useCartStore(s => s.items)
   const clearCart = useCartStore(s => s.clearCart)
+  const T = useT()
   const subtotal = items.reduce((s, i) => s + i.price * i.quantity, 0)
   const totalCount = items.reduce((s, i) => s + i.quantity, 0)
 
@@ -34,24 +37,27 @@ export default function Cart() {
             <path d="M15 18l-6-6 6-6" stroke="#D62828" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </button>
-        <h1 className="font-bold text-ink text-base">Корзина</h1>
-        <button
-          onClick={handleClear}
-          className={`w-9 h-9 rounded-full bg-white shadow-card flex items-center justify-center active:scale-90 transition-all ${items.length === 0 ? 'opacity-30' : ''}`}
-          disabled={items.length === 0}
-        >
-          {TrashIcon}
-        </button>
+        <h1 className="font-bold text-ink text-base">{T.cart}</h1>
+        <div className="flex items-center gap-1.5">
+          <LangToggle />
+          <button
+            onClick={handleClear}
+            className={`w-9 h-9 rounded-full bg-white shadow-card flex items-center justify-center active:scale-90 transition-all ${items.length === 0 ? 'opacity-30' : ''}`}
+            disabled={items.length === 0}
+          >
+            {TrashIcon}
+          </button>
+        </div>
       </div>
 
       <div className="px-4 pt-4 flex flex-col gap-3">
         {items.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-24 text-center">
             <div className="text-6xl mb-4">🛒</div>
-            <h2 className="font-bold text-ink text-xl mb-2">Корзина пуста</h2>
-            <p className="text-gray-500 text-sm mb-6">Добавьте блюда из меню</p>
+            <h2 className="font-bold text-ink text-xl mb-2">{T.cartEmpty}</h2>
+            <p className="text-gray-500 text-sm mb-6">{T.cartEmptySub}</p>
             <button onClick={() => navigate('/')} className="btn-primary w-auto px-8">
-              Перейти в меню
+              {T.goToMenu}
             </button>
           </div>
         ) : (
@@ -72,22 +78,22 @@ export default function Cart() {
                 <circle cx="12" cy="12" r="10" stroke="#D62828" strokeWidth="2" />
                 <path d="M12 8v8M8 12h8" stroke="#D62828" strokeWidth="2" strokeLinecap="round" />
               </svg>
-              Добавить ещё блюда
+              {T.addMore}
             </button>
 
             {/* Summary */}
             <div className="bg-white rounded-2xl shadow-card p-4 mt-1">
               <div className="flex justify-between items-center text-sm text-gray-500 mb-2">
-                <span>Промежуточный итог</span>
-                <span className="text-ink font-semibold">{subtotal} р</span>
+                <span>{T.subtotal}</span>
+                <span className="text-ink font-semibold">{subtotal} {T.currency}</span>
               </div>
               <div className="flex justify-between items-center text-sm mb-3 pb-3 border-b border-warm-dark">
-                <span className="text-gray-500">Доставка</span>
-                <span className="text-green-600 font-semibold">Бесплатно</span>
+                <span className="text-gray-500">{T.delivery}</span>
+                <span className="text-green-600 font-semibold">{T.free}</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="font-bold text-ink text-base">Итого</span>
-                <span className="font-black text-red text-xl">{subtotal} р</span>
+                <span className="font-bold text-ink text-base">{T.total}</span>
+                <span className="font-black text-red text-xl">{subtotal} {T.currency}</span>
               </div>
             </div>
 
@@ -101,7 +107,7 @@ export default function Cart() {
                 <line x1="3" y1="6" x2="21" y2="6" stroke="white" strokeWidth="2" strokeLinecap="round" />
                 <path d="M16 10a4 4 0 01-8 0" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
-              Оформить заказ
+              {T.checkout}
             </button>
           </>
         )}

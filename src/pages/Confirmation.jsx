@@ -1,11 +1,12 @@
 import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
+import useT from '../hooks/useT.js'
 
 export default function Confirmation() {
   const navigate = useNavigate()
+  const T = useT()
 
   useEffect(() => {
-    // Закрыть WebApp через 5 секунд если открыто из Telegram
     const tg = window.Telegram?.WebApp
     if (tg?.close) {
       const timer = setTimeout(() => tg.close(), 5000)
@@ -29,20 +30,20 @@ export default function Confirmation() {
       </div>
 
       <h1 className="font-black text-ink text-2xl mb-2 animate-fade-up" style={{ animationDelay: '0.1s' }}>
-        Заказ отправлен!
+        {T.orderSent}
       </h1>
       <p className="text-gray-500 text-sm mb-2 animate-fade-up" style={{ animationDelay: '0.15s' }}>
-        Ваш заказ принят и будет доставлен в ближайшее время.
+        {T.orderAccepted}
       </p>
       <p className="cn-text text-red text-base font-bold mb-8 animate-fade-up" style={{ animationDelay: '0.2s' }}>
-        感谢您的订购！
+        {T.thankYou}
       </p>
 
       {/* Contact info */}
       <div className="bg-white rounded-2xl shadow-card p-4 w-full mb-6 animate-fade-up" style={{ animationDelay: '0.25s' }}>
-        <p className="text-xs text-gray-500 mb-1">Есть вопросы? Звоните:</p>
+        <p className="text-xs text-gray-500 mb-1">{T.questions}</p>
         <a href="tel:+3752967158" className="font-bold text-red text-lg">+375 29 671 58</a>
-        <p className="text-xs text-gray-400 mt-1">или пишите @JIAYUAN6688 в Telegram</p>
+        <p className="text-xs text-gray-400 mt-1">{T.orTelegram}</p>
       </div>
 
       <button
@@ -50,7 +51,7 @@ export default function Confirmation() {
         className="btn-primary animate-fade-up"
         style={{ animationDelay: '0.3s' }}
       >
-        Вернуться в меню
+        {T.backToMenu}
       </button>
     </div>
   )
