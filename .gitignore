@@ -3,5 +3,6 @@ dist/
 .env
 .env.local
 *.log
+menu.sql
 .DS_Store
 Thumbs.db

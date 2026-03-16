@@ -23,16 +23,6 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' })
   }
 
-  const expected = process.env.SEED_SECRET
-  if (!expected) {
-    return res.status(500).json({ error: 'SEED_SECRET не задан на сервере' })
-  }
-
-  const secret = req.query.secret ?? req.body?.secret
-  if (!secret || secret !== expected) {
-    return res.status(401).json({ error: 'Неверный secret' })
-  }
-
   let menu
   try {
     menu = JSON.parse(readFileSync(MENU_PATH, 'utf-8'))
