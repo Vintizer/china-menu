@@ -1,4 +1,13 @@
-import { getPool } from './_db.js'
+import pg from 'pg'
+
+const { Pool } = pg
+let pool
+function getPool() {
+  if (!pool) {
+    pool = new Pool({ connectionString: process.env.POSTGRES_URL, ssl: { rejectUnauthorized: false } })
+  }
+  return pool
+}
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*')
@@ -9,12 +18,8 @@ export default async function handler(req, res) {
 
   const client = await getPool().connect()
   try {
-    const { rows: cats } = await client.query(
-      'SELECT * FROM categories ORDER BY sort_order'
-    )
-    const { rows: dishes } = await client.query(
-      'SELECT * FROM dishes ORDER BY category_id, sort_order'
-    )
+    const { rows: cats } = await client.query('SELECT * FROM categories ORDER BY sort_order')
+    const { rows: dishes } = await client.query('SELECT * FROM dishes ORDER BY category_id, sort_order')
 
     const menu = {
       restaurant: {
@@ -43,10 +48,10 @@ export default async function handler(req, res) {
     }
 
     res.setHeader('Cache-Control', 'public, max-age=300, stale-while-revalidate=60')
-    res.status(200).json(menu)
+    return res.status(200).json(menu)
   } catch (e) {
     console.error('DB error:', e)
-    res.status(500).json({ error: 'Database error', message: e.message })
+    return res.status(500).json({ error: 'Database error', message: e.message })
   } finally {
     client.release()
   }

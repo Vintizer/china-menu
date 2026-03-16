@@ -26,6 +26,15 @@ export default defineConfig({
             next(e)
           }
         })
+
+        // В dev-режиме /api/seed недоступен — используй npm run seed
+        server.middlewares.use('/api/seed', (req, res) => {
+          res.setHeader('Content-Type', 'application/json')
+          res.statusCode = 503
+          res.end(JSON.stringify({
+            error: 'В режиме разработки используйте: npm run seed',
+          }))
+        })
       },
     },
   ],
