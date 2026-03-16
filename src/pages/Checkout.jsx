@@ -25,7 +25,9 @@ function formatOrderMessage({ name, phone, address, comment, payment }, items) {
 
 async function sendOrderToTelegram(message) {
   const tg = window.Telegram?.WebApp
-  if (tg?.sendData) {
+  // sendData только когда реально открыто из Telegram (есть initData). На сайте скрипт может быть, но initData нет.
+  const isInsideTelegram = !!tg?.initData
+  if (tg?.sendData && isInsideTelegram) {
     tg.sendData(message)
     return true
   }
