@@ -40,15 +40,7 @@ async function sendOrderToTelegram(message) {
     return true
   }
 
-  const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`
-  console.log('[Checkout] Отправка не из Telegram:', {
-    VITE_BOT_TOKEN: BOT_TOKEN,
-    VITE_ADMIN_CHAT_ID: CHAT_ID,
-    text: message,
-    url,
-  })
-
-  const res = await fetch(url, {
+  const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ chat_id: CHAT_ID, text: message, parse_mode: 'HTML' }),
