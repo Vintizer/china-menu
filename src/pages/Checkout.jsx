@@ -36,8 +36,7 @@ async function sendOrderToTelegram(message) {
   const CHAT_ID = import.meta.env.VITE_ADMIN_CHAT_ID
 
   if (!BOT_TOKEN || !CHAT_ID) {
-    console.warn('No BOT_TOKEN/ADMIN_CHAT_ID configured — order not sent via API')
-    return true
+    throw new Error('No BOT_TOKEN/ADMIN_CHAT_ID configured — order cannot be sent from website')
   }
 
   const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
@@ -46,7 +45,10 @@ async function sendOrderToTelegram(message) {
     body: JSON.stringify({ chat_id: CHAT_ID, text: message, parse_mode: 'HTML' }),
   })
 
-  if (!res.ok) throw new Error(`Telegram API error: ${res.status}`)
+  const data = await res.json().catch(() => ({}))
+  if (!res.ok || !data.ok) {
+    throw new Error(data.description || `Telegram API error: ${res.status}`)
+  }
   return true
 }
 
