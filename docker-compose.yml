@@ -33,6 +33,20 @@ services:
     ports:
       - "3000:3000"
 
+  # Telegram-бот (NestJS, TypeScript) — webhook для заказов
+  telegram-bot:
+    build:
+      context: ./services/telegram-bot
+    restart: unless-stopped
+    environment:
+      BOT_TOKEN: ${VITE_BOT_TOKEN}
+      ADMIN_CHAT_ID: ${VITE_ADMIN_CHAT_ID}
+      WEBAPP_URL: ${WEBAPP_URL:-https://china-menu.vercel.app/}
+      WEBHOOK_DOMAIN: ${BOT_WEBHOOK_DOMAIN:-}
+      PORT: 3001
+    ports:
+      - "3001:3001"
+
   # Caddy — reverse proxy с автоматическим HTTPS (Let's Encrypt)
   # Раскомментируй, если хочешь SSL на этом сервере. Нужен домен и порты 80/443.
   caddy:
@@ -46,6 +60,7 @@ services:
       - caddy_data:/data
     depends_on:
       - app
+      - telegram-bot
 
 volumes:
   postgres_data:

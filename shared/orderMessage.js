@@ -1,6 +1,6 @@
 /**
  * Единый формат текста заказа для Telegram (HTML).
- * Используется и в Checkout (клиент), и в api/bot.js (сервер).
+ * Используется в Checkout (клиент) и в services/telegram-bot (сервер).
  *
  * @param {{ name: string, phone: string, address: string, comment?: string, payment?: string, orderId?: string }} form
  * @param {{ name_ru: string, quantity: number, price: number, code?: string }[]} items
