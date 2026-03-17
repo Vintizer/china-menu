@@ -10,8 +10,24 @@ async function bootstrap() {
   const webhookDomain = process.env.WEBHOOK_DOMAIN;
   if (webhookDomain) {
     const webhookUrl = `${webhookDomain.replace(/\/$/, '')}/webhook`;
-    await botService.setWebhook(webhookUrl);
-    console.log('[bot] Webhook set to', webhookUrl);
+    const maxRetries = 5;
+    const delayMs = 8000;
+    for (let i = 0; i < maxRetries; i++) {
+      try {
+        if (i > 0) {
+          console.log(`[bot] setWebhook retry ${i + 1}/${maxRetries}...`);
+          await new Promise((r) => setTimeout(r, delayMs));
+        }
+        await botService.setWebhook(webhookUrl);
+        console.log('[bot] Webhook set to', webhookUrl);
+        break;
+      } catch (e) {
+        lastErr = e;
+        if (i === maxRetries - 1) {
+          console.error('[bot] setWebhook failed after', maxRetries, 'attempts. Bot will run but won\'t receive updates.', (e as Error)?.message ?? e);
+        }
+      }
+    }
   } else {
     console.warn('[bot] WEBHOOK_DOMAIN not set — webhook not registered. Set it for production.');
   }

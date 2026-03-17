@@ -47,6 +47,17 @@ services:
     ports:
       - "3001:3001"
 
+  # Cloudflare Tunnel — если DuckDNS не резолвится у Telegram, используй этот URL для webhook.
+  # Запусти: docker compose up -d cloudflared
+  # В логах появится URL вида https://xxx.trycloudflare.com — скопируй в BOT_WEBHOOK_DOMAIN и перезапусти бота.
+  # URL меняется при перезапуске cloudflared.
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    restart: unless-stopped
+    command: tunnel --no-autoupdate --url http://telegram-bot:3001
+    depends_on:
+      - telegram-bot
+
   # Caddy — reverse proxy с автоматическим HTTPS (Let's Encrypt)
   # Раскомментируй, если хочешь SSL на этом сервере. Нужен домен и порты 80/443.
   caddy:
