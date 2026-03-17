@@ -47,14 +47,25 @@ bot.on("message", async (ctx) => {
 
 export default async function handler(req, res) {
     try {
-        console.log("[bot] update received", {
-            hasBody: !!req.body,
-            type: typeof req.body,
+        let body = req.body;
+        if (typeof body === "string") {
+            try {
+                body = JSON.parse(body);
+            } catch (e) {
+                console.error("[bot] body is string but not JSON", e);
+                return res.status(400).send("bad body");
+            }
+        }
+        const msg = body?.message ?? {};
+        console.log("[bot] update", {
+            update_id: body?.update_id,
+            message_keys: msg ? Object.keys(msg) : [],
+            has_web_app_data: !!msg?.web_app_data,
         });
-        await bot.handleUpdate(req.body);
+        await bot.handleUpdate(body);
         res.status(200).send("ok");
     } catch (err) {
-        console.error(err);
+        console.error("[bot] handler error", err);
         res.status(500).send("error");
     }
 }
