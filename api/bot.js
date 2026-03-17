@@ -74,18 +74,17 @@ bot.on("message", async (ctx) => {
 });
 
 bot.on("callback_query", async (ctx) => {
-    const adminId = Number(process.env.VITE_ADMIN_CHAT_ID);
     const cb = ctx.callbackQuery;
-    const msgChatId = cb?.message?.chat?.id;
-    const parsed = parseOrderCallback(cb?.data);
+    const adminChatId = String(process.env.VITE_ADMIN_CHAT_ID || "").trim();
+    const msgChatId = cb?.message?.chat?.id != null ? String(cb.message.chat.id) : "";
 
+    const parsed = parseOrderCallback(cb?.data);
     if (!parsed) {
         await ctx.answerCbQuery("Неизвестная кнопка", { show_alert: false }).catch(() => {});
         return;
     }
 
-    // Жёстко ограничиваем: кнопки обрабатываются только в админском чате
-    if (!Number.isFinite(adminId) || msgChatId !== adminId) {
+    if (!adminChatId || msgChatId !== adminChatId) {
         await ctx.answerCbQuery("Недостаточно прав", { show_alert: true }).catch(() => {});
         return;
     }
@@ -96,30 +95,23 @@ bot.on("callback_query", async (ctx) => {
         ? `✅ Ваш заказ ${orderId} принят. Скоро свяжемся с вами.`
         : `❌ Ваш заказ ${orderId} отменён. Если это ошибка — напишите администратору.`;
 
+    // Сразу снимаем "ожидание" с кнопки — иначе Telegram крутит бесконечно
     await ctx.answerCbQuery(statusText, { show_alert: false }).catch(() => {});
 
-    // Помечаем сообщение у админа и убираем кнопки
-    try {
-        const original = cb.message?.text || cb.message?.caption || "";
-        const updated = `${original}\n\n<b>${statusText}</b>`;
-        await ctx.telegram.editMessageText(
-            cb.message.chat.id,
-            cb.message.message_id,
-            undefined,
-            updated,
-            { parse_mode: "HTML", reply_markup: { inline_keyboard: [] }, disable_web_page_preview: true }
-        );
-    } catch (e) {
-        // редактирование может упасть (например, если сообщение уже изменено) — не критично
-        console.error("[bot] edit admin message failed", e);
-    }
+    const chatId = cb.message.chat.id;
+    const messageId = cb.message.message_id;
+    const original = cb.message?.text || cb.message?.caption || "";
+    const updated = `${original}\n\n<b>${statusText}</b>`;
 
-    // Уведомляем пользователя в личку с ботом
-    try {
-        await ctx.telegram.sendMessage(userId, userText);
-    } catch (e) {
-        console.error("[bot] notify user failed", e);
-    }
+    ctx.telegram
+        .editMessageText(chatId, messageId, undefined, updated, {
+            parse_mode: "HTML",
+            reply_markup: { inline_keyboard: [] },
+            disable_web_page_preview: true,
+        })
+        .catch((e) => console.error("[bot] edit admin message failed", e));
+
+    ctx.telegram.sendMessage(userId, userText).catch((e) => console.error("[bot] notify user failed", e));
 });
 
 export default async function handler(req, res) {
