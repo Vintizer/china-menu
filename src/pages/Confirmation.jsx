@@ -1,5 +1,4 @@
 import { useNavigate, useLocation } from 'react-router-dom'
-import { useEffect } from 'react'
 import useT from '../hooks/useT.js'
 
 export default function Confirmation() {
@@ -7,14 +6,6 @@ export default function Confirmation() {
   const location = useLocation()
   const T = useT()
   const debug = location.state?.debug
-
-  useEffect(() => {
-    const tg = window.Telegram?.WebApp
-    if (tg?.close) {
-      const timer = setTimeout(() => tg.close(), 5000)
-      return () => clearTimeout(timer)
-    }
-  }, [])
 
   return (
     <div className="min-h-dvh pattern-bg flex flex-col items-center justify-center px-6 text-center">

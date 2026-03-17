@@ -8,11 +8,6 @@ import { formatOrderMessage } from '../../shared/orderMessage.js'
 async function sendOrderToTelegram(message) {
   const tg = window.Telegram?.WebApp
   const isInsideTelegram = !!tg?.initData
-  if (tg?.sendData && isInsideTelegram) {
-    tg.sendData(message)
-    return { ok: true, via: 'telegram' }
-  }
-
   const BOT_TOKEN = import.meta.env.VITE_BOT_TOKEN
   const CHAT_ID = import.meta.env.VITE_ADMIN_CHAT_ID
 
@@ -29,6 +24,11 @@ async function sendOrderToTelegram(message) {
   const data = await res.json().catch(() => ({}))
   if (!res.ok || !data.ok) {
     throw new Error(data.description || `Telegram API error: ${res.status}`)
+  }
+
+  if (tg?.sendData && isInsideTelegram) {
+    tg.sendData(message)
+    return { ok: true, via: 'telegram' }
   }
   return { ok: true, via: 'fetch' }
 }
