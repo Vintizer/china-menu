@@ -3,25 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import useCartStore from '../store/cartStore.js'
 import useT from '../hooks/useT.js'
 import Header from '../components/Header.jsx'
-
-function formatOrderMessage({ name, phone, address, comment, payment }, items) {
-  const lines = items.map(i => `• ${i.code} ${i.name_ru} × ${i.quantity} = ${i.price * i.quantity} р`)
-  const total = items.reduce((s, i) => s + i.price * i.quantity, 0)
-  return [
-    '🍜 <b>Новый заказ</b>',
-    '',
-    `👤 Имя: ${name}`,
-    `📞 Телефон: ${phone}`,
-    `📍 Адрес: ${address}`,
-    comment ? `💬 Комментарий: ${comment}` : null,
-    `💳 Оплата: ${payment === 'cash' ? 'Наличные' : 'Картой'}`,
-    '',
-    '<b>Блюда:</b>',
-    ...lines,
-    '',
-    `<b>Итого: ${total} р</b>`,
-  ].filter(l => l !== null).join('\n')
-}
+import { formatOrderMessage } from '../../shared/orderMessage.js'
 
 async function sendOrderToTelegram(message) {
   const tg = window.Telegram?.WebApp
