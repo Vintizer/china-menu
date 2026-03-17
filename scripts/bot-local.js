@@ -1,26 +1,24 @@
 /**
- * Локальный запуск бота в режиме long polling.
- * HTTPS для бота не нужен — апдейты бот забирает сам.
- * WEBAPP_URL в .env — URL Mini App (для локальной отладки подставь ngrok/cloudflared).
+ * Локальный запуск бота (NestJS).
+ * Для webhook нужен публичный URL — задай WEBHOOK_DOMAIN (ngrok/cloudflared).
+ * Без WEBHOOK_DOMAIN webhook не зарегистрируется.
  */
-import "dotenv/config";
-import { bot } from "../api/bot.js";
+import { spawn } from "child_process";
+import path from "path";
+import { fileURLToPath } from "url";
 
-const token = process.env.VITE_BOT_TOKEN;
-if (!token) {
-  console.error("VITE_BOT_TOKEN не задан в .env");
-  process.exit(1);
-}
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const botDir = path.join(__dirname, "../services/telegram-bot");
 
-async function main() {
-  await bot.telegram.deleteWebhook({ drop_pending_updates: true });
-  await bot.launch();
-  console.log("Бот запущен (polling). WEBAPP_URL:", process.env.WEBAPP_URL || "https://china-menu.vercel.app/");
-  process.once("SIGINT", () => bot.stop("SIGINT"));
-  process.once("SIGTERM", () => bot.stop("SIGTERM"));
-}
-
-main().catch((e) => {
-  console.error(e);
-  process.exit(1);
+const child = spawn("npm", ["run", "start:dev"], {
+  cwd: botDir,
+  stdio: "inherit",
+  shell: true,
+  env: {
+    ...process.env,
+    BOT_TOKEN: process.env.VITE_BOT_TOKEN,
+    ADMIN_CHAT_ID: process.env.VITE_ADMIN_CHAT_ID,
+  },
 });
+
+child.on("exit", (code) => process.exit(code ?? 0));

@@ -13,8 +13,9 @@ docker compose up -d --build
 # 3. Загрузи меню в БД (один раз после первого запуска)
 docker compose exec app npm run seed
 
-# 4. Настрой webhook бота (замени URL на свой домен с HTTPS)
-# curl -X POST "https://api.telegram.org/bot<TOKEN>/setWebhook?url=https://твой-домен.com/api/bot"
+# 4. Настрой webhook бота (замени на свой домен бота с HTTPS)
+# curl -X POST "https://api.telegram.org/bot<TOKEN>/setWebhook?url=https://bot.твой-домен.com/webhook"
+# Либо задай BOT_WEBHOOK_DOMAIN в .env — бот сам зарегистрирует webhook при старте
 ```
 
 Приложение будет на `http://localhost:3000` (или на твоём домене, если настроишь Caddy/nginx).
@@ -32,7 +33,7 @@ Telegram требует HTTPS для Mini App и webhook. Варианты:
 3. Убедись, что домен указывает на IP сервера, порты 80 и 443 открыты
 4. В `.env` задай `WEBAPP_URL=https://твой-домен.com/`
 5. `docker compose up -d --build`
-6. Webhook: `curl -X POST "https://api.telegram.org/bot<TOKEN>/setWebhook?url=https://твой-домен.com/api/bot"`
+6. Webhook: задай `BOT_WEBHOOK_DOMAIN=https://bot.твой-домен.com` в .env (бот сам вызовет setWebhook)
 
 ### Вариант B: Свой nginx / Cloudflare Tunnel
 
@@ -45,7 +46,8 @@ Telegram требует HTTPS для Mini App и webhook. Варианты:
 | Сервис   | Описание                          |
 |----------|-----------------------------------|
 | postgres | БД для меню (categories, dishes)  |
-| app      | Node + Express: статика, /api/bot, /api/menu |
+| app      | Node + Express: статика, /api/menu |
+| telegram-bot | NestJS: webhook для Telegram (порт 3001) |
 | caddy    | (опционально) Reverse proxy + Let's Encrypt |
 
 ---

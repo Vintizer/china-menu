@@ -1,12 +1,12 @@
 /**
  * Express-сервер для self-hosted деплоя.
- * Раздаёт статику (dist/), /api/bot (webhook), /api/menu (из БД).
+ * Раздаёт статику (dist/), /api/menu (из БД).
+ * Webhook бота — отдельный сервис telegram-bot (порт 3001).
  */
 import "dotenv/config";
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
-import botHandler from "../api/bot.js";
 import menuHandler from "../api/menu.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -17,15 +17,6 @@ const app = express();
 app.use(express.json({ limit: "1mb" }));
 
 // API routes
-app.post("/api/bot", async (req, res) => {
-  try {
-    await botHandler(req, res);
-  } catch (err) {
-    console.error("[server] /api/bot error:", err);
-    res.status(500).send("error");
-  }
-});
-
 app.get("/api/menu", async (req, res) => {
   try {
     await menuHandler(req, res);
