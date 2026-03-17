@@ -5,6 +5,7 @@ export interface OrderForm {
   comment?: string;
   payment?: string;
   orderId?: string;
+  source?: 'website' | 'bot';
 }
 
 export interface OrderItem {
@@ -15,7 +16,8 @@ export interface OrderItem {
 }
 
 export function formatOrderMessage(form: OrderForm, items: OrderItem[]): string {
-  const { name, phone, address, comment, payment = 'cash', orderId } = form;
+  const { name, phone, address, comment, payment = 'cash', orderId, source } = form;
+  const sourceLabel = source === 'bot' ? '🤖 Бот' : source === 'website' ? '📱 Сайт' : null;
   const lines = items.map(
     (i) =>
       `• ${(i.code ?? '').trim() ? i.code + ' ' : ''}${i.name_ru} × ${i.quantity} = ${i.price * i.quantity} р`,
@@ -24,6 +26,7 @@ export function formatOrderMessage(form: OrderForm, items: OrderItem[]): string 
   return [
     '🍜 <b>Новый заказ</b>',
     orderId ? `<code>${orderId}</code>` : null,
+    sourceLabel ? `📍 Откуда: ${sourceLabel}` : null,
     '',
     `👤 Имя: ${name}`,
     `📞 Телефон: ${phone}`,

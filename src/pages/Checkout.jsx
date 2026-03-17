@@ -20,8 +20,10 @@ async function sendOrderToTelegram({ message, orderId, userId }) {
     throw new Error('No BOT_TOKEN/ADMIN_CHAT_ID configured — order cannot be sent from website!')
   }
 
-  const reply_markup = userId
-    ? {
+  const reply_markup =
+    // userId
+    // ?
+    {
       inline_keyboard: [
         [
           { text: '✅ Принять', callback_data: `ord:ok:${orderId}:${userId}` },
@@ -29,7 +31,7 @@ async function sendOrderToTelegram({ message, orderId, userId }) {
         ],
       ],
     }
-    : undefined
+    // : undefined
 
   const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
     method: 'POST',
@@ -102,7 +104,8 @@ export default function Checkout() {
     try {
       const orderId = makeOrderId()
       const userId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id
-      const message = formatOrderMessage({ ...form, orderId }, items)
+      const source = window.Telegram?.WebApp?.initData ? 'bot' : 'website'
+      const message = formatOrderMessage({ ...form, orderId, source }, items)
       await sendOrderToTelegram({ message, orderId, userId })
       clearCart()
       navigatedToConfirmation.current = true
