@@ -1,17 +1,18 @@
 # Пример для Caddy с автоматическим HTTPS.
-# Замени example.com на свой домен. Caddy сам получит сертификат от Let's Encrypt.
+# Замени china-cafe.duckdns.org на свой домен. Caddy сам получит сертификат от Let's Encrypt.
 #
 # Раскомментируй сервис caddy в docker-compose.yml и запусти:
 #   docker compose up -d
 #
 # Убедись, что порты 80 и 443 открыты и домен указывает на IP сервера.
+# DuckDNS даёт только xxx.duckdns.org — поддомен bot.xxx не резолвится, поэтому
+# app и webhook бота на одном домене: /webhook -> бот, остальное -> приложение.
 
-example.com {
-    reverse_proxy app:3000
-}
-
-# Webhook для Telegram-бота. Замени bot.example.com на свой поддомен.
-# WEBHOOK_DOMAIN=https://bot.example.com
-bot.example.com {
-    reverse_proxy telegram-bot:3001
+china-cafe.duckdns.org {
+    handle /webhook {
+        reverse_proxy telegram-bot:3001
+    }
+    handle {
+        reverse_proxy app:3000
+    }
 }
