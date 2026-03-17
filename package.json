@@ -7,10 +7,15 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
+    "start": "node server/index.js",
     "seed": "node scripts/seed.js",
-    "dump": "node scripts/generate-sql.js"
+    "dump": "node scripts/generate-sql.js",
+    "bot": "node scripts/bot-local.js"
   },
   "dependencies": {
+    "dotenv": "^17.3.1",
+    "express": "^4.21.0",
+    "telegraf": "^4.16.3",
     "pg": "^8.20.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -20,7 +25,6 @@
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.2",
     "autoprefixer": "^10.4.20",
-    "dotenv": "^17.3.1",
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.14",
     "vite": "^5.4.10"

@@ -114,6 +114,7 @@ bot.on("callback_query", async (ctx) => {
     ctx.telegram.sendMessage(userId, userText).catch((e) => console.error("[bot] notify user failed", e));
 });
 
+export { bot };
 export default async function handler(req, res) {
     try {
         let body = req.body;

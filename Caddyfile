@@ -1,0 +1,11 @@
+# Пример для Caddy с автоматическим HTTPS.
+# Замени example.com на свой домен. Caddy сам получит сертификат от Let's Encrypt.
+#
+# Раскомментируй сервис caddy в docker-compose.yml и запусти:
+#   docker compose up -d
+#
+# Убедись, что порты 80 и 443 открыты и домен указывает на IP сервера.
+
+example.com {
+    reverse_proxy app:3000
+}

@@ -16,9 +16,11 @@ if (!process.env.POSTGRES_URL) {
   process.exit(1)
 }
 
+const url = process.env.POSTGRES_URL || ""
+const useSsl = url.includes("sslmode=require") || url.includes("sslmode=verify")
 const pool = new Pool({
-  connectionString: process.env.POSTGRES_URL,
-  ssl: { rejectUnauthorized: false },
+  connectionString: url,
+  ...(useSsl ? { ssl: { rejectUnauthorized: false } } : {}),
 })
 
 const menu = JSON.parse(

@@ -4,7 +4,12 @@ const { Pool } = pg
 let pool
 function getPool() {
   if (!pool) {
-    pool = new Pool({ connectionString: process.env.POSTGRES_URL, ssl: { rejectUnauthorized: false } })
+    const url = process.env.POSTGRES_URL || ""
+    const useSsl = url.includes("sslmode=require") || url.includes("sslmode=verify")
+    pool = new Pool({
+      connectionString: url,
+      ...(useSsl ? { ssl: { rejectUnauthorized: false } } : {}),
+    })
   }
   return pool
 }

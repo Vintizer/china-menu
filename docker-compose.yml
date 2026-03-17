@@ -1,0 +1,52 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: chinamenu
+      POSTGRES_PASSWORD: chinamenu
+      POSTGRES_DB: chinamenu
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U chinamenu -d chinamenu"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      args:
+        VITE_BOT_TOKEN: ${VITE_BOT_TOKEN}
+        VITE_ADMIN_CHAT_ID: ${VITE_ADMIN_CHAT_ID}
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      PORT: 3000
+      POSTGRES_URL: postgres://chinamenu:chinamenu@postgres:5432/chinamenu
+      VITE_BOT_TOKEN: ${VITE_BOT_TOKEN}
+      VITE_ADMIN_CHAT_ID: ${VITE_ADMIN_CHAT_ID}
+      WEBAPP_URL: ${WEBAPP_URL:-https://china-menu.vercel.app/}
+    ports:
+      - "3000:3000"
+
+  # Caddy — reverse proxy с автоматическим HTTPS (Let's Encrypt)
+  # Раскомментируй, если хочешь SSL на этом сервере. Нужен домен и порты 80/443.
+  # caddy:
+  #   image: caddy:2-alpine
+  #   restart: unless-stopped
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   volumes:
+  #     - ./Caddyfile:/etc/caddy/Caddyfile
+  #     - caddy_data:/data
+  #   depends_on:
+  #     - app
+
+volumes:
+  postgres_data:
+  # caddy_data:
