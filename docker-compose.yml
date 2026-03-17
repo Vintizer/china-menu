@@ -35,18 +35,18 @@ services:
 
   # Caddy — reverse proxy с автоматическим HTTPS (Let's Encrypt)
   # Раскомментируй, если хочешь SSL на этом сервере. Нужен домен и порты 80/443.
-  # caddy:
-  #   image: caddy:2-alpine
-  #   restart: unless-stopped
-  #   ports:
-  #     - "80:80"
-  #     - "443:443"
-  #   volumes:
-  #     - ./Caddyfile:/etc/caddy/Caddyfile
-  #     - caddy_data:/data
-  #   depends_on:
-  #     - app
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+    depends_on:
+      - app
 
 volumes:
   postgres_data:
-  # caddy_data:
+  caddy_data:
