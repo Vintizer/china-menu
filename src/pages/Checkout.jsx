@@ -7,11 +7,10 @@ import { formatOrderMessage } from '../../shared/orderMessage.js'
 
 async function sendOrderToTelegram(message) {
   const tg = window.Telegram?.WebApp
-  // sendData только когда реально открыто из Telegram (есть initData). На сайте скрипт может быть, но initData нет.
   const isInsideTelegram = !!tg?.initData
   if (tg?.sendData && isInsideTelegram) {
     tg.sendData(message)
-    return true
+    return { ok: true, via: 'telegram' }
   }
 
   const BOT_TOKEN = import.meta.env.VITE_BOT_TOKEN
@@ -31,7 +30,7 @@ async function sendOrderToTelegram(message) {
   if (!res.ok || !data.ok) {
     throw new Error(data.description || `Telegram API error: ${res.status}`)
   }
-  return true
+  return { ok: true, via: 'fetch' }
 }
 
 export default function Checkout() {
@@ -80,10 +79,18 @@ export default function Checkout() {
     setLoading(true)
     try {
       const message = formatOrderMessage(form, items)
-      await sendOrderToTelegram(message)
+      const result = await sendOrderToTelegram(message)
       clearCart()
       navigatedToConfirmation.current = true
-      navigate('/confirmation')
+      const debug = result.via === 'telegram' ? {
+        sentVia: 'Telegram sendData()',
+        payloadLength: message.length,
+        payloadPreview: message.slice(0, 600),
+        timestamp: new Date().toISOString(),
+        webhookUrl: 'https://china-menu.vercel.app/api/bot',
+        userAgent: navigator.userAgent?.slice(0, 80),
+      } : null
+      navigate('/confirmation', { state: debug ? { debug } : {} })
     } catch (e) {
       console.error(e)
       alert(T.orderError)
