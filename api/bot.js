@@ -5,9 +5,16 @@ const bot = new Telegraf(process.env.VITE_BOT_TOKEN);
 
 // обработка данных из Mini App
 bot.on("message", async (ctx) => {
-    if (ctx.webAppData) {
+    const webAppData = ctx.message?.web_app_data;
+    if (webAppData?.data) {
         const adminId = process.env.VITE_ADMIN_CHAT_ID;
-        const payload = String(ctx.webAppData.data ?? "");
+        const payload = String(webAppData.data ?? "");
+
+        console.log("[bot] web_app_data received", {
+            fromId: ctx.from?.id,
+            username: ctx.from?.username,
+            payloadLen: payload.length,
+        });
 
         // Сейчас Mini App шлёт уже готовый HTML-текст.
         // На всякий случай поддержим и JSON-формат (если вернёмся к нему позже).
@@ -40,6 +47,10 @@ bot.on("message", async (ctx) => {
 
 export default async function handler(req, res) {
     try {
+        console.log("[bot] update received", {
+            hasBody: !!req.body,
+            type: typeof req.body,
+        });
         await bot.handleUpdate(req.body);
         res.status(200).send("ok");
     } catch (err) {
