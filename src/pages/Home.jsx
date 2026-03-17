@@ -12,6 +12,11 @@ export default function Home() {
 
   return (
     <div className="min-h-dvh pattern-bg pb-28">
+      {/* Временно не работаем */}
+      <div className="bg-red text-white text-center py-2 px-4 text-sm font-bold cn-text">
+        暂时休息 · Временно не работаем
+      </div>
+
       {/* Top bar */}
       <div className="sticky top-0 z-50 bg-warm/95 backdrop-blur-sm border-b border-warm-dark px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
