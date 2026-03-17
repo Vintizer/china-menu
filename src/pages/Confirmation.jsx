@@ -1,11 +1,9 @@
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import useT from '../hooks/useT.js'
 
 export default function Confirmation() {
   const navigate = useNavigate()
-  const location = useLocation()
   const T = useT()
-  const debug = location.state?.debug
 
   return (
     <div className="min-h-dvh pattern-bg flex flex-col items-center justify-center px-6 text-center">
@@ -31,19 +29,6 @@ export default function Confirmation() {
       <p className="cn-text text-red text-base font-bold mb-8 animate-fade-up" style={{ animationDelay: '0.2s' }}>
         {T.thankYou}
       </p>
-
-      {/* Отладка: только когда заказ отправлен из Telegram */}
-      {debug && (
-        <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 w-full mb-4 text-left animate-fade-up" style={{ animationDelay: '0.22s' }}>
-          <p className="text-xs font-bold text-amber-800 mb-2">🔧 Отладка (Telegram)</p>
-          <pre className="text-xs text-amber-900 whitespace-pre-wrap break-words font-mono">
-            {JSON.stringify(debug, null, 2)}
-          </pre>
-          <p className="text-xs text-amber-700 mt-2">
-            Если сообщение не пришло — в Vercel Logs смотри запросы к {debug.webhookUrl}
-          </p>
-        </div>
-      )}
 
       {/* Contact info */}
       <div className="bg-white rounded-2xl shadow-card p-4 w-full mb-6 animate-fade-up" style={{ animationDelay: '0.25s' }}>

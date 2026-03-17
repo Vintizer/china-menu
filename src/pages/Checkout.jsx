@@ -5,7 +5,12 @@ import useT from '../hooks/useT.js'
 import Header from '../components/Header.jsx'
 import { formatOrderMessage } from '../../shared/orderMessage.js'
 
-async function sendOrderToTelegram(message) {
+function makeOrderId() {
+  // короткий id для callback_data (без пробелов/юникода)
+  return `o${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`
+}
+
+async function sendOrderToTelegram({ message, orderId, userId }) {
   const tg = window.Telegram?.WebApp
   const isInsideTelegram = !!tg?.initData
   const BOT_TOKEN = import.meta.env.VITE_BOT_TOKEN
@@ -15,10 +20,27 @@ async function sendOrderToTelegram(message) {
     throw new Error('No BOT_TOKEN/ADMIN_CHAT_ID configured — order cannot be sent from website')
   }
 
+  const reply_markup = userId
+    ? {
+      inline_keyboard: [
+        [
+          { text: '✅ Принять', callback_data: `ord:ok:${orderId}:${userId}` },
+          { text: '❌ Отменить', callback_data: `ord:cancel:${orderId}:${userId}` },
+        ],
+      ],
+    }
+    : undefined
+
   const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ chat_id: CHAT_ID, text: message, parse_mode: 'HTML' }),
+    body: JSON.stringify({
+      chat_id: CHAT_ID,
+      text: message,
+      parse_mode: 'HTML',
+      disable_web_page_preview: true,
+      ...(reply_markup ? { reply_markup } : {}),
+    }),
   })
 
   const data = await res.json().catch(() => ({}))
@@ -78,19 +100,13 @@ export default function Checkout() {
 
     setLoading(true)
     try {
-      const message = formatOrderMessage(form, items)
-      const result = await sendOrderToTelegram(message)
+      const orderId = makeOrderId()
+      const userId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id
+      const message = formatOrderMessage({ ...form, orderId }, items)
+      await sendOrderToTelegram({ message, orderId, userId })
       clearCart()
       navigatedToConfirmation.current = true
-      const debug = result.via === 'telegram' ? {
-        sentVia: 'Telegram sendData()',
-        payloadLength: message.length,
-        payloadPreview: message.slice(0, 600),
-        timestamp: new Date().toISOString(),
-        webhookUrl: 'https://china-menu.vercel.app/api/bot',
-        userAgent: navigator.userAgent?.slice(0, 80),
-      } : null
-      navigate('/confirmation', { state: debug ? { debug } : {} })
+      navigate('/confirmation')
     } catch (e) {
       console.error(e)
       alert(T.orderError)

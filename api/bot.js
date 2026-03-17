@@ -3,18 +3,46 @@ import { formatOrderMessage } from "../shared/orderMessage.js";
 
 const bot = new Telegraf(process.env.VITE_BOT_TOKEN);
 
+const WEBAPP_URL = process.env.WEBAPP_URL || "https://china-menu.vercel.app/";
+
+function parseOrderCallback(data) {
+    // ord:(ok|cancel):<orderId>:<userId>
+    if (typeof data !== "string") return null;
+    const parts = data.split(":");
+    if (parts.length !== 4) return null;
+    const [prefix, action, orderId, userIdRaw] = parts;
+    if (prefix !== "ord") return null;
+    if (action !== "ok" && action !== "cancel") return null;
+    const userId = Number(userIdRaw);
+    if (!Number.isFinite(userId)) return null;
+    if (!orderId || orderId.length > 32) return null;
+    return { action, orderId, userId };
+}
+
+bot.start(async (ctx) => {
+    await ctx.reply("Открыть меню:", {
+        reply_markup: {
+            keyboard: [[{ text: "🍜 Открыть меню", web_app: { url: WEBAPP_URL } }]],
+            resize_keyboard: true,
+        },
+    });
+});
+
+bot.command("menu", async (ctx) => {
+    await ctx.reply("Меню:", {
+        reply_markup: {
+            keyboard: [[{ text: "🍜 Открыть меню", web_app: { url: WEBAPP_URL } }]],
+            resize_keyboard: true,
+        },
+    });
+});
+
 // обработка данных из Mini App
 bot.on("message", async (ctx) => {
     const webAppData = ctx.message?.web_app_data;
     if (webAppData?.data) {
         const adminId = process.env.VITE_ADMIN_CHAT_ID;
         const payload = String(webAppData.data ?? "");
-
-        console.log("[bot] web_app_data received", {
-            fromId: ctx.from?.id,
-            username: ctx.from?.username,
-            payloadLen: payload.length,
-        });
 
         // Сейчас Mini App шлёт уже готовый HTML-текст.
         // На всякий случай поддержим и JSON-формат (если вернёмся к нему позже).
@@ -45,6 +73,55 @@ bot.on("message", async (ctx) => {
     }
 });
 
+bot.on("callback_query", async (ctx) => {
+    const adminId = Number(process.env.VITE_ADMIN_CHAT_ID);
+    const cb = ctx.callbackQuery;
+    const msgChatId = cb?.message?.chat?.id;
+    const parsed = parseOrderCallback(cb?.data);
+
+    if (!parsed) {
+        await ctx.answerCbQuery("Неизвестная кнопка", { show_alert: false }).catch(() => {});
+        return;
+    }
+
+    // Жёстко ограничиваем: кнопки обрабатываются только в админском чате
+    if (!Number.isFinite(adminId) || msgChatId !== adminId) {
+        await ctx.answerCbQuery("Недостаточно прав", { show_alert: true }).catch(() => {});
+        return;
+    }
+
+    const { action, orderId, userId } = parsed;
+    const statusText = action === "ok" ? "✅ Заказ принят" : "❌ Заказ отменён";
+    const userText = action === "ok"
+        ? `✅ Ваш заказ ${orderId} принят. Скоро свяжемся с вами.`
+        : `❌ Ваш заказ ${orderId} отменён. Если это ошибка — напишите администратору.`;
+
+    await ctx.answerCbQuery(statusText, { show_alert: false }).catch(() => {});
+
+    // Помечаем сообщение у админа и убираем кнопки
+    try {
+        const original = cb.message?.text || cb.message?.caption || "";
+        const updated = `${original}\n\n<b>${statusText}</b>`;
+        await ctx.telegram.editMessageText(
+            cb.message.chat.id,
+            cb.message.message_id,
+            undefined,
+            updated,
+            { parse_mode: "HTML", reply_markup: { inline_keyboard: [] }, disable_web_page_preview: true }
+        );
+    } catch (e) {
+        // редактирование может упасть (например, если сообщение уже изменено) — не критично
+        console.error("[bot] edit admin message failed", e);
+    }
+
+    // Уведомляем пользователя в личку с ботом
+    try {
+        await ctx.telegram.sendMessage(userId, userText);
+    } catch (e) {
+        console.error("[bot] notify user failed", e);
+    }
+});
+
 export default async function handler(req, res) {
     try {
         let body = req.body;
@@ -56,12 +133,6 @@ export default async function handler(req, res) {
                 return res.status(400).send("bad body");
             }
         }
-        const msg = body?.message ?? {};
-        console.log("[bot] update", {
-            update_id: body?.update_id,
-            message_keys: msg ? Object.keys(msg) : [],
-            has_web_app_data: !!msg?.web_app_data,
-        });
         await bot.handleUpdate(body);
         res.status(200).send("ok");
     } catch (err) {
