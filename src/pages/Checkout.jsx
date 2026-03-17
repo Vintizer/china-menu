@@ -17,7 +17,7 @@ async function sendOrderToTelegram({ message, orderId, userId }) {
   const CHAT_ID = import.meta.env.VITE_ADMIN_CHAT_ID
 
   if (!BOT_TOKEN || !CHAT_ID) {
-    throw new Error('No BOT_TOKEN/ADMIN_CHAT_ID configured — order cannot be sent from website')
+    throw new Error('No BOT_TOKEN/ADMIN_CHAT_ID configured — order cannot be sent from website!')
   }
 
   const reply_markup = userId
