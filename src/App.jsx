@@ -1,5 +1,6 @@
 import { Routes, Route, useLocation } from 'react-router-dom'
 import { useEffect } from 'react'
+import useAdminStore from './store/adminStore.js'
 import Home from './pages/Home.jsx'
 import Category from './pages/Category.jsx'
 import Cart from './pages/Cart.jsx'
@@ -16,6 +17,14 @@ export default function App() {
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [location.pathname])
+
+  useEffect(() => {
+    if (window.Telegram?.WebApp?.initData) {
+      useAdminStore.getState().check()
+    } else {
+      useAdminStore.setState({ isAdmin: false, checked: true })
+    }
+  }, [])
 
   return (
     <Routes>

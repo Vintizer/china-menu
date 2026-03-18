@@ -1,8 +1,10 @@
 import { useNavigate } from 'react-router-dom'
 import LangToggle from './LangToggle.jsx'
+import useAdminStore from '../store/adminStore.js'
 
 export default function Header({ title, subtitle, onBack, rightIcon, onRight, transparent }) {
   const navigate = useNavigate()
+  const isAdmin = useAdminStore(s => s.isAdmin)
 
   const handleBack = () => {
     if (onBack) onBack()
@@ -33,6 +35,17 @@ export default function Header({ title, subtitle, onBack, rightIcon, onRight, tr
       </div>
 
       <div className="flex items-center gap-1.5 flex-shrink-0">
+        {isAdmin && (
+          <button
+            onClick={() => navigate('/admin')}
+            className="w-9 h-9 rounded-full bg-white shadow-card flex items-center justify-center active:scale-90 transition-transform"
+            aria-label="Админка"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D62828" strokeWidth="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+        )}
         <LangToggle />
         {rightIcon ? (
           <button

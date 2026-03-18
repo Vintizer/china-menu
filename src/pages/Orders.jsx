@@ -3,6 +3,7 @@ import useT from '../hooks/useT.js'
 import useOrdersStore from '../store/ordersStore.js'
 import useCartStore from '../store/cartStore.js'
 import useLangStore from '../store/langStore.js'
+import useAdminStore from '../store/adminStore.js'
 import CartBar from '../components/CartBar.jsx'
 import LangToggle from '../components/LangToggle.jsx'
 import MainTabs from '../components/MainTabs.jsx'
@@ -10,6 +11,7 @@ import MainTabs from '../components/MainTabs.jsx'
 export default function Orders() {
   const navigate = useNavigate()
   const T = useT()
+  const isAdmin = useAdminStore(s => s.isAdmin)
   const orders = useOrdersStore((s) => s.orders)
   const setItems = useCartStore((s) => s.setItems)
   const lang = useLangStore((s) => s.lang)
@@ -33,6 +35,17 @@ export default function Orders() {
           </div>
         </div>
         <div className="flex items-center gap-2">
+          {isAdmin && (
+            <button
+              onClick={() => navigate('/admin')}
+              className="w-9 h-9 rounded-full bg-white shadow-card flex items-center justify-center active:scale-90 transition-transform"
+              aria-label="Админка"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D62828" strokeWidth="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+          )}
           <LangToggle />
           <button
             onClick={() => navigate('/search')}

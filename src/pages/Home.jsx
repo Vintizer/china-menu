@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { useMenu } from '../hooks/useMenu.js'
 import useT from '../hooks/useT.js'
+import useAdminStore from '../store/adminStore.js'
 import CategoryCard from '../components/CategoryCard.jsx'
 import CartBar from '../components/CartBar.jsx'
 import LangToggle from '../components/LangToggle.jsx'
@@ -10,6 +11,7 @@ export default function Home() {
   const navigate = useNavigate()
   const { menu, loading } = useMenu()
   const T = useT()
+  const isAdmin = useAdminStore(s => s.isAdmin)
 
   return (
     <div className="min-h-dvh pattern-bg pb-28">
@@ -25,6 +27,17 @@ export default function Home() {
           </div>
         </div>
         <div className="flex items-center gap-2">
+          {isAdmin && (
+            <button
+              onClick={() => navigate('/admin')}
+              className="w-9 h-9 rounded-full bg-white shadow-card flex items-center justify-center active:scale-90 transition-transform"
+              aria-label="Админка"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D62828" strokeWidth="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+          )}
           <LangToggle />
           <button
             onClick={() => navigate('/search')}
