@@ -27,10 +27,12 @@ export function verifyTelegramWebAppData(initData, botToken) {
       .map(k => `${k}=${pairs[k]}`)
       .join('\n')
 
-    const secretKey = crypto.createHmac('sha256', botToken).update('WebAppData').digest()
+    const secretKey = crypto.createHmac('sha256', 'WebAppData').update(botToken).digest()
     const computedHash = crypto.createHmac('sha256', secretKey).update(dataCheckString).digest('hex')
 
-    if (!crypto.timingSafeEqual(Buffer.from(hash, 'hex'), Buffer.from(computedHash, 'hex'))) {
+    const hashMatch = hash.length === computedHash.length && crypto.timingSafeEqual(Buffer.from(hash, 'hex'), Buffer.from(computedHash, 'hex'))
+    if (!hashMatch) {
+      console.log('[admin] hash mismatch:', { receivedLen: hash.length, computedLen: computedHash.length, received: hash.slice(0, 16) + '...', computed: computedHash.slice(0, 16) + '...', dataCheckLen: dataCheckString.length })
       return { valid: false }
     }
 
