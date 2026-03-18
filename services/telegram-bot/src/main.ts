@@ -22,7 +22,6 @@ async function bootstrap() {
         console.log('[bot] Webhook set to', webhookUrl);
         break;
       } catch (e) {
-        lastErr = e;
         if (i === maxRetries - 1) {
           console.error('[bot] setWebhook failed after', maxRetries, 'attempts. Bot will run but won\'t receive updates.', (e as Error)?.message ?? e);
         }
