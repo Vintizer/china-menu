@@ -77,7 +77,8 @@ export default function Checkout() {
     payment: 'cash',
     deliveryType: 'delivery',
     timePreference: 'asap',
-    scheduledTime: '',
+    scheduledHour: '',
+    scheduledMinute: '',
   })
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState({})
@@ -98,7 +99,7 @@ export default function Checkout() {
     if (!form.name.trim()) errs.name = T.errName
     if (!form.phone.trim()) errs.phone = T.errPhone
     if (needsAddress && !form.address.trim()) errs.address = T.errAddress
-    if (form.timePreference === 'scheduled' && !form.scheduledTime.trim()) errs.scheduledTime = T.errScheduledTime
+    if (form.timePreference === 'scheduled' && (!form.scheduledHour || !form.scheduledMinute)) errs.scheduledTime = T.errScheduledTime
     return errs
   }
 
@@ -114,7 +115,11 @@ export default function Checkout() {
       const orderId = makeOrderId()
       const userId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id
       const source = window.Telegram?.WebApp?.initData ? 'bot' : 'website'
-      const message = formatOrderMessage({ ...form, orderId, source }, items)
+      const scheduledTime =
+        form.timePreference === 'scheduled' && form.scheduledHour && form.scheduledMinute
+          ? `${String(form.scheduledHour).padStart(2, '0')}:${String(form.scheduledMinute).padStart(2, '0')}`
+          : ''
+      const message = formatOrderMessage({ ...form, scheduledTime, orderId, source }, items)
       await sendOrderToTelegram({ message, orderId, userId })
       addOrder({ items: items.map((i) => ({ ...i, categoryId: i.categoryId })) })
       clearCart()
@@ -207,19 +212,44 @@ export default function Checkout() {
           </div>
           {form.timePreference === 'scheduled' && (
             <div className="mt-2">
-              <label className="block text-xs font-semibold text-gray-500 mb-1.5 ml-1">
-                {T.scheduledTime} <span className="text-gray-400 font-normal">{T.scheduledTimeHint}</span>
-              </label>
-              <input
-                type="time"
-                step="900"
-                value={form.scheduledTime}
-                onChange={(e) => {
-                  setForm((f) => ({ ...f, scheduledTime: e.target.value }))
-                  setErrors((e2) => ({ ...e2, scheduledTime: '' }))
-                }}
-                className={`input-field text-sm ${errors.scheduledTime ? 'border-red ring-2 ring-red/20' : ''}`}
-              />
+              <div className="flex gap-2">
+                <div className="flex-1">
+                  <label className="block text-xs font-semibold text-gray-500 mb-1.5 ml-1">{T.scheduledHour}</label>
+                  <select
+                    value={form.scheduledHour}
+                    onChange={(e) => {
+                      setForm((f) => ({ ...f, scheduledHour: e.target.value }))
+                      setErrors((e2) => ({ ...e2, scheduledTime: '' }))
+                    }}
+                    className={`input-field text-sm w-full ${errors.scheduledTime ? 'border-red ring-2 ring-red/20' : ''}`}
+                  >
+                    <option value="">—</option>
+                    {Array.from({ length: 24 }, (_, i) => (
+                      <option key={i} value={i}>
+                        {String(i).padStart(2, '0')}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="flex-1">
+                  <label className="block text-xs font-semibold text-gray-500 mb-1.5 ml-1">{T.scheduledMinute}</label>
+                  <select
+                    value={form.scheduledMinute}
+                    onChange={(e) => {
+                      setForm((f) => ({ ...f, scheduledMinute: e.target.value }))
+                      setErrors((e2) => ({ ...e2, scheduledTime: '' }))
+                    }}
+                    className={`input-field text-sm w-full ${errors.scheduledTime ? 'border-red ring-2 ring-red/20' : ''}`}
+                  >
+                    <option value="">—</option>
+                    {[0, 15, 30, 45].map((m) => (
+                      <option key={m} value={m}>
+                        {String(m).padStart(2, '0')}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
               {errors.scheduledTime && (
                 <p className="text-red text-xs mt-1 ml-1">{errors.scheduledTime}</p>
               )}
