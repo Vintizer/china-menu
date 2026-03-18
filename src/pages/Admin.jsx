@@ -14,7 +14,7 @@ function adminFetch(path, options = {}) {
     ...rest,
     headers: {
       'Content-Type': 'application/json',
-      'X-Telegram-Init-Data': initData,
+      'X-Telegram-Init-Data': btoa(unescape(encodeURIComponent(initData))),
       ...options.headers,
     },
     ...(body !== undefined ? { body: JSON.stringify(body) } : {}),

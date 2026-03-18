@@ -15,7 +15,10 @@ const useAdminStore = create((set) => ({
     }
     try {
       const res = await fetch('/api/admin/check', {
-        headers: { 'X-Telegram-Init-Data': initData },
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Telegram-Init-Data': btoa(unescape(encodeURIComponent(initData))),
+        },
       })
       const data = await res.json().catch((e) => {
         console.log('[admin] parse error:', e)
