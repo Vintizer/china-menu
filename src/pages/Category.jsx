@@ -62,7 +62,7 @@ export default function Category() {
           <input
             autoFocus
             type="text"
-            placeholder={T.searchPlaceholder}
+            placeholder={T.searchPlaceholderCategory}
             value={search}
             onChange={e => setSearch(e.target.value)}
             className="input-field text-sm"
@@ -86,7 +86,7 @@ export default function Category() {
           filteredItems.map((dish, i) => (
             <DishCard
               key={dish.code}
-              dish={dish}
+              dish={{ ...dish, categoryId: category.id }}
               style={{ animationDelay: `${i * 0.05}s` }}
             />
           ))

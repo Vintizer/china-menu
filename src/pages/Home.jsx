@@ -1,14 +1,29 @@
 import { useNavigate } from 'react-router-dom'
-import { useMenu } from '../hooks/useMenu.js'
+import { useMenu, getAllItems } from '../hooks/useMenu.js'
 import useT from '../hooks/useT.js'
+import useFavoritesStore from '../store/favoritesStore.js'
+import useOrdersStore from '../store/ordersStore.js'
+import useCartStore from '../store/cartStore.js'
 import CategoryCard from '../components/CategoryCard.jsx'
 import CartBar from '../components/CartBar.jsx'
 import LangToggle from '../components/LangToggle.jsx'
+import DishCard from '../components/DishCard.jsx'
 
 export default function Home() {
   const navigate = useNavigate()
   const { menu, loading } = useMenu()
   const T = useT()
+  const favoriteCodes = useFavoritesStore((s) => s.codes)
+  const orders = useOrdersStore((s) => s.orders)
+  const setItems = useCartStore((s) => s.setItems)
+
+  const allItems = menu ? getAllItems(menu) : []
+  const favoriteDishes = allItems.filter((d) => favoriteCodes.includes(d.code))
+
+  const handleRepeatOrder = (order) => {
+    setItems(order.items)
+    navigate('/cart')
+  }
 
   return (
     <div className="min-h-dvh pattern-bg pb-28">
@@ -25,6 +40,16 @@ export default function Home() {
         </div>
         <div className="flex items-center gap-2">
           <LangToggle />
+          <button
+            onClick={() => navigate('/search')}
+            className="w-9 h-9 rounded-full bg-white shadow-card flex items-center justify-center active:scale-90 transition-transform"
+            aria-label="Поиск"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <circle cx="11" cy="11" r="8" stroke="#D62828" strokeWidth="2" />
+              <path d="M21 21l-4.35-4.35" stroke="#D62828" strokeWidth="2" strokeLinecap="round" />
+            </svg>
+          </button>
           <button
             onClick={() => navigate('/cart')}
             className="w-9 h-9 rounded-full bg-white shadow-card flex items-center justify-center active:scale-90 transition-transform"
@@ -50,8 +75,50 @@ export default function Home() {
         </div>
       </div>
 
+      {/* Favorites */}
+      {!loading && favoriteDishes.length > 0 && (
+        <div className="px-4 mt-4">
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="font-bold text-ink text-base">❤️ {T.favorites}</h2>
+          </div>
+          <div className="flex gap-3 overflow-x-auto pb-2 -mx-1 ">
+            {favoriteDishes.slice(0, 6).map((dish) => (
+              <div key={dish.code} className="flex-shrink-0 w-36">
+                <DishCard dish={dish} />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Repeat last order */}
+      {!loading && orders.length > 0 && (
+        <div className="px-4 mt-4">
+          <h2 className="font-bold text-ink text-base mb-2">🔄 {T.myOrders}</h2>
+          <div className="flex gap-2 overflow-x-auto pb-2 -mx-1 ">
+            {orders.slice(0, 3).map((order) => (
+              <button
+                key={order.id}
+                onClick={() => handleRepeatOrder(order)}
+                className="flex-shrink-0 bg-white rounded-xl shadow-card px-4 py-3 text-left min-w-[140px] active:scale-[0.98] transition-transform"
+              >
+                <p className="text-xs text-gray-500">
+                  {new Date(order.timestamp).toLocaleDateString()}
+                </p>
+                <p className="font-bold text-ink text-sm mt-0.5">
+                  {T.positions(order.items.reduce((s, i) => s + i.quantity, 0))}
+                </p>
+                <span className="text-red text-xs font-bold mt-1 inline-block">
+                  {T.repeatOrderBtn} →
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Categories grid */}
-      <div className="px-4">
+      <div className="px-4 mt-4">
         {loading ? (
           <div className="grid grid-cols-2 gap-3 stagger-children">
             {[...Array(8)].map((_, i) => (

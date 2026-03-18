@@ -1,13 +1,16 @@
 import { useState } from 'react'
 import useCartStore from '../store/cartStore.js'
+import useFavoritesStore from '../store/favoritesStore.js'
 import useLangStore from '../store/langStore.js'
 import useT from '../hooks/useT.js'
 import DishImage from './DishImage.jsx'
 
-export default function DishCard({ dish, style }) {
+export default function DishCard({ dish, style, compact }) {
   const addItem = useCartStore(s => s.addItem)
   const items = useCartStore(s => s.items)
   const updateQuantity = useCartStore(s => s.updateQuantity)
+  const toggleFavorite = useFavoritesStore(s => s.toggle)
+  const isFavorite = useFavoritesStore(s => s.codes.includes(dish.code))
   const cartItem = items.find(i => i.code === dish.code)
   const [added, setAdded] = useState(false)
   const lang = useLangStore(s => s.lang)
@@ -24,6 +27,19 @@ export default function DishCard({ dish, style }) {
   return (
     <div className="bg-white rounded-2xl shadow-card overflow-hidden animate-fade-up" style={style}>
       <div className="relative">
+        <button
+          onClick={(e) => {
+            e.stopPropagation()
+            toggleFavorite(dish.code)
+          }}
+          className={`absolute top-3 left-3 z-10 w-9 h-9 rounded-full flex items-center justify-center transition-all
+            ${isFavorite ? 'bg-red text-white' : 'bg-white/90 text-gray-400 hover:bg-white'}`}
+          aria-label={isFavorite ? 'Убрать из избранного' : 'В избранное'}
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill={isFavorite ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2">
+            <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
+          </svg>
+        </button>
         <DishImage
           src={dish.image}
           code={dish.code}

@@ -9,8 +9,14 @@ export const t = {
     todaySpecialSub: 'Фирменные блюда дня',
     viewDetails: 'Посмотреть',
 
+    // Search
+    searchTitle: 'Поиск',
+    searchPlaceholder: 'Поиск по меню...',
+    searchHint: 'Введите название блюда',
+    searchHintSub: 'Поиск по всему меню',
+
     // Category
-    searchPlaceholder: 'Поиск блюда...',
+    searchPlaceholderCategory: 'Поиск в категории...',
     notFound: 'Ничего не найдено',
     notFoundSub: 'Попробуйте другой запрос',
 
@@ -63,6 +69,27 @@ export const t = {
     questions: 'Есть вопросы? Звоните:',
     orTelegram: 'или пишите @JIAYUAN6688 в Telegram',
     backToMenu: 'Вернуться в меню',
+    repeatOrder: 'Повторить заказ',
+
+    // Favorites
+    favorites: 'Избранное',
+    favoritesEmpty: 'Пока ничего нет',
+    favoritesEmptySub: 'Добавляйте блюда в избранное',
+
+    // Orders history
+    myOrders: 'Мои заказы',
+    repeatOrderBtn: 'Повторить',
+
+    // Delivery
+    deliveryType: 'Тип заказа',
+    delivery: 'Доставка',
+    pickup: 'Самовывоз',
+    timePreference: 'Когда доставить?',
+    asap: 'Как можно скорее',
+    scheduled: 'Ко времени',
+    scheduledTime: 'Время',
+    phScheduledTime: '14:00',
+    errScheduledTime: 'Укажите время',
   },
 
   cn: {
@@ -75,8 +102,14 @@ export const t = {
     todaySpecialSub: '今日特色菜',
     viewDetails: '查看详情',
 
+    // Search
+    searchTitle: '搜索',
+    searchPlaceholder: '搜索菜单...',
+    searchHint: '输入菜品名称',
+    searchHintSub: '搜索整个菜单',
+
     // Category
-    searchPlaceholder: '搜索菜品...',
+    searchPlaceholderCategory: '在分类中搜索...',
     notFound: '没有找到',
     notFoundSub: '请换个关键词试试',
 
@@ -129,5 +162,26 @@ export const t = {
     questions: '有问题？请联系我们：',
     orTelegram: '或在 Telegram 联系 @JIAYUAN6688',
     backToMenu: '返回菜单',
+    repeatOrder: '再来一单',
+
+    // Favorites
+    favorites: '收藏',
+    favoritesEmpty: '暂无收藏',
+    favoritesEmptySub: '将喜欢的菜品加入收藏',
+
+    // Orders history
+    myOrders: '我的订单',
+    repeatOrderBtn: '再来一单',
+
+    // Delivery
+    deliveryType: '订单类型',
+    delivery: '配送',
+    pickup: '自取',
+    timePreference: '送达时间',
+    asap: '尽快',
+    scheduled: '指定时间',
+    scheduledTime: '时间',
+    phScheduledTime: '14:00',
+    errScheduledTime: '请选择时间',
   },
 }

@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import useCartStore from '../store/cartStore.js'
+import useOrdersStore from '../store/ordersStore.js'
 import useT from '../hooks/useT.js'
 import Header from '../components/Header.jsx'
 import { formatOrderMessage } from '../../shared/orderMessage.js'
@@ -61,6 +62,7 @@ export default function Checkout() {
   const navigate = useNavigate()
   const items = useCartStore(s => s.items)
   const clearCart = useCartStore(s => s.clearCart)
+  const addOrder = useOrdersStore(s => s.addOrder)
   const T = useT()
   const total = items.reduce((s, i) => s + i.price * i.quantity, 0)
   const count = items.reduce((s, i) => s + i.quantity, 0)
@@ -73,23 +75,30 @@ export default function Checkout() {
     address: '',
     comment: '',
     payment: 'cash',
+    deliveryType: 'delivery',
+    timePreference: 'asap',
+    scheduledTime: '',
   })
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState({})
   const navigatedToConfirmation = useRef(false)
 
+  const isPickup = form.deliveryType === 'pickup'
+  const needsAddress = !isPickup
+
   const FIELDS = [
     { key: 'name',    label: T.fieldName,    placeholder: T.phName,    icon: '👤', type: 'text', required: true },
     { key: 'phone',   label: T.fieldPhone,   placeholder: T.phPhone,   icon: '📞', type: 'tel',  required: true },
-    { key: 'address', label: T.fieldAddress, placeholder: T.phAddress, icon: '🏠', type: 'text', required: true },
+    { key: 'address', label: T.fieldAddress, placeholder: T.phAddress, icon: '🏠', type: 'text', required: needsAddress, multiline: false, hidden: isPickup },
     { key: 'comment', label: T.fieldComment, placeholder: T.phComment, icon: '💬', type: 'text', required: false, multiline: true },
   ]
 
   const validate = () => {
     const errs = {}
-    if (!form.name.trim())    errs.name    = T.errName
-    if (!form.phone.trim())   errs.phone   = T.errPhone
-    if (!form.address.trim()) errs.address = T.errAddress
+    if (!form.name.trim()) errs.name = T.errName
+    if (!form.phone.trim()) errs.phone = T.errPhone
+    if (needsAddress && !form.address.trim()) errs.address = T.errAddress
+    if (form.timePreference === 'scheduled' && !form.scheduledTime.trim()) errs.scheduledTime = T.errScheduledTime
     return errs
   }
 
@@ -107,6 +116,7 @@ export default function Checkout() {
       const source = window.Telegram?.WebApp?.initData ? 'bot' : 'website'
       const message = formatOrderMessage({ ...form, orderId, source }, items)
       await sendOrderToTelegram({ message, orderId, userId })
+      addOrder({ items: items.map((i) => ({ ...i, categoryId: i.categoryId })) })
       clearCart()
       navigatedToConfirmation.current = true
       navigate('/confirmation')
@@ -143,6 +153,77 @@ export default function Checkout() {
           </div>
         </div>
 
+        {/* Delivery type */}
+        <div>
+          <div className="flex items-center gap-2 mb-3">
+            <div className="w-1 h-5 bg-red rounded-full" />
+            <h2 className="font-bold text-ink text-base">{T.deliveryType}</h2>
+          </div>
+          <div className="grid grid-cols-2 gap-2">
+            {[
+              { id: 'delivery', label: T.delivery, icon: '🚚' },
+              { id: 'pickup', label: T.pickup, icon: '🏪' },
+            ].map((opt) => (
+              <button
+                key={opt.id}
+                onClick={() => setForm((f) => ({ ...f, deliveryType: opt.id }))}
+                className={`flex items-center justify-center gap-2 py-3 rounded-xl border-2 font-bold text-sm transition-all
+                  ${form.deliveryType === opt.id
+                    ? 'border-red bg-red-light text-red'
+                    : 'border-warm-dark bg-white text-ink'
+                  }`}
+              >
+                <span className="text-lg">{opt.icon}</span>
+                {opt.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Time preference */}
+        <div>
+          <div className="flex items-center gap-2 mb-3">
+            <div className="w-1 h-5 bg-red rounded-full" />
+            <h2 className="font-bold text-ink text-base">{T.timePreference}</h2>
+          </div>
+          <div className="grid grid-cols-2 gap-2">
+            {[
+              { id: 'asap', label: T.asap, icon: '⚡' },
+              { id: 'scheduled', label: T.scheduled, icon: '🕐' },
+            ].map((opt) => (
+              <button
+                key={opt.id}
+                onClick={() => setForm((f) => ({ ...f, timePreference: opt.id }))}
+                className={`flex items-center justify-center gap-2 py-3 rounded-xl border-2 font-bold text-sm transition-all
+                  ${form.timePreference === opt.id
+                    ? 'border-red bg-red-light text-red'
+                    : 'border-warm-dark bg-white text-ink'
+                  }`}
+              >
+                <span className="text-lg">{opt.icon}</span>
+                {opt.label}
+              </button>
+            ))}
+          </div>
+          {form.timePreference === 'scheduled' && (
+            <div className="mt-2">
+              <label className="block text-xs font-semibold text-gray-500 mb-1.5 ml-1">{T.scheduledTime}</label>
+              <input
+                type="time"
+                value={form.scheduledTime}
+                onChange={(e) => {
+                  setForm((f) => ({ ...f, scheduledTime: e.target.value }))
+                  setErrors((e2) => ({ ...e2, scheduledTime: '' }))
+                }}
+                className={`input-field text-sm ${errors.scheduledTime ? 'border-red ring-2 ring-red/20' : ''}`}
+              />
+              {errors.scheduledTime && (
+                <p className="text-red text-xs mt-1 ml-1">{errors.scheduledTime}</p>
+              )}
+            </div>
+          )}
+        </div>
+
         {/* Contact info */}
         <div>
           <div className="flex items-center gap-2 mb-3">
@@ -151,7 +232,7 @@ export default function Checkout() {
           </div>
 
           <div className="flex flex-col gap-3">
-            {FIELDS.map(field => (
+            {FIELDS.filter((f) => !f.hidden).map((field) => (
               <div key={field.key}>
                 <label className="block text-xs font-semibold text-gray-500 mb-1.5 ml-1">
                   {field.label}

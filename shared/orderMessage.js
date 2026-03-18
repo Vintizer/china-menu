@@ -2,12 +2,30 @@
  * Единый формат текста заказа для Telegram (HTML).
  * Используется в Checkout (клиент) и в services/telegram-bot (сервер).
  *
- * @param {{ name: string, phone: string, address: string, comment?: string, payment?: string, orderId?: string, source?: 'website'|'bot' }} form
+ * @param {{ name, phone, address?, comment?, payment?, orderId?, source?, deliveryType?, timePreference?, scheduledTime? }} form
  * @param {{ name_ru: string, quantity: number, price: number, code?: string }[]} items
  */
 export function formatOrderMessage(form, items) {
-  const { name, phone, address, comment, payment = 'cash', orderId, source } = form
+  const {
+    name,
+    phone,
+    address,
+    comment,
+    payment = 'cash',
+    orderId,
+    source,
+    deliveryType = 'delivery',
+    timePreference = 'asap',
+    scheduledTime,
+  } = form
   const sourceLabel = source === 'bot' ? '🤖 Бот' : source === 'website' ? '📱 Сайт' : null
+  const isPickup = deliveryType === 'pickup'
+  const deliveryLabel = isPickup ? '🏪 Самовывоз' : '🚚 Доставка'
+  const timeLabel =
+    timePreference === 'scheduled' && scheduledTime
+      ? `🕐 Ко времени: ${scheduledTime}`
+      : '⚡ Как можно скорее'
+
   const lines = items.map(
     (i) =>
       `• ${(i.code ?? '').trim() ? i.code + ' ' : ''}${i.name_ru} × ${i.quantity} = ${i.price * i.quantity} р`
@@ -18,9 +36,12 @@ export function formatOrderMessage(form, items) {
     orderId ? `<code>${orderId}</code>` : null,
     sourceLabel ? `📍 Откуда: ${sourceLabel}` : null,
     '',
+    deliveryLabel,
+    timeLabel,
+    '',
     `👤 Имя: ${name}`,
     `📞 Телефон: ${phone}`,
-    `📍 Адрес: ${address}`,
+    !isPickup && address ? `📍 Адрес: ${address}` : null,
     comment ? `💬 Комментарий: ${comment}` : null,
     `💳 Оплата: ${payment === 'cash' ? 'Наличные' : 'Картой'}`,
     '',

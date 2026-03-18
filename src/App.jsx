@@ -5,6 +5,7 @@ import Category from './pages/Category.jsx'
 import Cart from './pages/Cart.jsx'
 import Checkout from './pages/Checkout.jsx'
 import Confirmation from './pages/Confirmation.jsx'
+import Search from './pages/Search.jsx'
 
 export default function App() {
   const location = useLocation()
@@ -16,6 +17,7 @@ export default function App() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/search" element={<Search />} />
       <Route path="/category/:id" element={<Category />} />
       <Route path="/cart" element={<Cart />} />
       <Route path="/checkout" element={<Checkout />} />

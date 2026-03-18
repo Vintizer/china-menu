@@ -1,9 +1,21 @@
 import { useNavigate } from 'react-router-dom'
 import useT from '../hooks/useT.js'
+import useOrdersStore from '../store/ordersStore.js'
+import useCartStore from '../store/cartStore.js'
 
 export default function Confirmation() {
   const navigate = useNavigate()
   const T = useT()
+  const orders = useOrdersStore((s) => s.orders)
+  const setItems = useCartStore((s) => s.setItems)
+  const lastOrder = orders[0]
+
+  const handleRepeat = () => {
+    if (lastOrder?.items?.length) {
+      setItems(lastOrder.items)
+      navigate('/cart')
+    }
+  }
 
   return (
     <div className="min-h-dvh pattern-bg flex flex-col items-center justify-center px-6 text-center">
@@ -31,19 +43,28 @@ export default function Confirmation() {
       </p>
 
       {/* Contact info */}
-      <div className="bg-white rounded-2xl shadow-card p-4 w-full mb-6 animate-fade-up" style={{ animationDelay: '0.25s' }}>
+      <div className="bg-white rounded-2xl shadow-card p-4 w-full mb-4 animate-fade-up" style={{ animationDelay: '0.25s' }}>
         <p className="text-xs text-gray-500 mb-1">{T.questions}</p>
         <a href="tel:+3752967158" className="font-bold text-red text-lg">+375 29 671 58</a>
         <p className="text-xs text-gray-400 mt-1">{T.orTelegram}</p>
       </div>
 
-      <button
-        onClick={() => navigate('/')}
-        className="btn-primary animate-fade-up"
-        style={{ animationDelay: '0.3s' }}
-      >
-        {T.backToMenu}
-      </button>
+      <div className="flex flex-col gap-2 w-full animate-fade-up" style={{ animationDelay: '0.3s' }}>
+        {lastOrder?.items?.length > 0 && (
+          <button
+            onClick={handleRepeat}
+            className="w-full py-3 rounded-xl border-2 border-red bg-white text-red font-bold text-sm active:scale-[0.98] transition-transform"
+          >
+            {T.repeatOrder}
+          </button>
+        )}
+        <button
+          onClick={() => navigate('/')}
+          className="btn-primary"
+        >
+          {T.backToMenu}
+        </button>
+      </div>
     </div>
   )
 }

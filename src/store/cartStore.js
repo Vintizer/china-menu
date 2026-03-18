@@ -38,6 +38,15 @@ const useCartStore = create(
         set({ items: [] })
       },
 
+      setItems(newItems) {
+        set({
+          items: newItems.map((i) => ({
+            ...i,
+            quantity: i.quantity ?? 1,
+          })),
+        })
+      },
+
       get totalCount() {
         return get().items.reduce((s, i) => s + i.quantity, 0)
       },
