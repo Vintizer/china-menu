@@ -27,7 +27,7 @@ export function verifyTelegramWebAppData(initData, botToken) {
       .map(k => `${k}=${pairs[k]}`)
       .join('\n')
 
-    const secretKey = crypto.createHmac('sha256', 'WebAppData').update(botToken).digest()
+    const secretKey = crypto.createHmac('sha256', botToken).update('WebAppData').digest()
     const computedHash = crypto.createHmac('sha256', secretKey).update(dataCheckString).digest('hex')
 
     if (!crypto.timingSafeEqual(Buffer.from(hash, 'hex'), Buffer.from(computedHash, 'hex'))) {
