@@ -8,6 +8,7 @@ import Confirmation from './pages/Confirmation.jsx'
 import Search from './pages/Search.jsx'
 import Favorites from './pages/Favorites.jsx'
 import Orders from './pages/Orders.jsx'
+import Admin from './pages/Admin.jsx'
 
 export default function App() {
   const location = useLocation()
@@ -26,6 +27,7 @@ export default function App() {
       <Route path="/cart" element={<Cart />} />
       <Route path="/checkout" element={<Checkout />} />
       <Route path="/confirmation" element={<Confirmation />} />
+      <Route path="/admin" element={<Admin />} />
     </Routes>
   )
 }

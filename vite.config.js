@@ -38,6 +38,11 @@ export default defineConfig({
       },
     },
   ],
+  server: {
+    proxy: {
+      '/api/admin': { target: 'http://localhost:3000', changeOrigin: true },
+    },
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),

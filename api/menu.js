@@ -1,18 +1,4 @@
-import pg from 'pg'
-
-const { Pool } = pg
-let pool
-function getPool() {
-  if (!pool) {
-    const url = process.env.POSTGRES_URL || ""
-    const useSsl = url.includes("sslmode=require") || url.includes("sslmode=verify")
-    pool = new Pool({
-      connectionString: url,
-      ...(useSsl ? { ssl: { rejectUnauthorized: false } } : {}),
-    })
-  }
-  return pool
-}
+import { getPool } from './db.js'
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*')

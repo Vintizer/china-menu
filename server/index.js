@@ -8,6 +8,7 @@ import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
 import menuHandler from "../api/menu.js";
+import adminHandler from "../api/admin.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const distPath = path.join(__dirname, "../dist");
@@ -24,6 +25,14 @@ app.get("/api/menu", async (req, res) => {
     console.error("[server] /api/menu error:", err);
     res.status(500).json({ error: "Database error" });
   }
+});
+
+app.all("/api/admin/*", (req, res, next) => {
+  req.path = req.path || req.url?.split("?")[0];
+  adminHandler(req, res).catch((err) => {
+    console.error("[server] /api/admin error:", err);
+    res.status(500).json({ error: "Server error" });
+  });
 });
 
 // Static files + SPA fallback
