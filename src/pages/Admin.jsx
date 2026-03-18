@@ -33,6 +33,7 @@ export default function Admin() {
 
   useEffect(() => {
     const initData = getInitData()
+    console.log('[admin] Admin page load:', { hasInitData: !!initData, initDataLength: initData?.length ?? 0 })
     if (!initData) {
       setStatus('denied')
       setDenyReason('Откройте приложение в Telegram через бота.')
@@ -42,6 +43,7 @@ export default function Admin() {
     adminFetch('/check')
       .then(async r => {
         const data = await r.json().catch(() => ({ error: 'Ошибка ответа сервера' }))
+        console.log('[admin] Admin /check:', { status: r.status, ok: r.ok, data })
         if (!r.ok || data.error) {
           setStatus('denied')
           setDenyReason(data.error || 'Доступ запрещён')

@@ -19,11 +19,22 @@ export default function App() {
   }, [location.pathname])
 
   useEffect(() => {
-    if (window.Telegram?.WebApp?.initData) {
+    const initData = window.Telegram?.WebApp?.initData
+    console.log('[admin] App mount:', { hasInitData: !!initData })
+    if (initData) {
       useAdminStore.getState().check()
     } else {
       useAdminStore.setState({ isAdmin: false, checked: true })
     }
+  }, [])
+
+  useEffect(() => {
+    const unsub = useAdminStore.subscribe((state) => {
+      if (state.checked) {
+        console.log('[admin] button visibility:', { isAdmin: state.isAdmin, showButton: !!state.isAdmin })
+      }
+    })
+    return unsub
   }, [])
 
   return (

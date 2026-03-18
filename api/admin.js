@@ -8,23 +8,30 @@ function requireAdmin(req, res) {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-Telegram-Init-Data')
 
   const initData = req.headers['x-telegram-init-data'] || req.body?.initData
+  console.log('[admin] requireAdmin:', { hasInitData: !!initData, initDataLen: initData?.length })
   if (!initData) {
+    console.log('[admin] reject: no initData')
     return res.status(401).json({ error: 'Только в Telegram. Откройте приложение через бота.' })
   }
 
   if (!BOT_TOKEN) {
+    console.log('[admin] reject: no BOT_TOKEN')
     return res.status(500).json({ error: 'BOT_TOKEN не настроен' })
   }
 
   const { valid, user } = verifyTelegramWebAppData(initData, BOT_TOKEN)
+  console.log('[admin] verify:', { valid, userId: user?.id, adminIds: process.env.ADMIN_TELEGRAM_ID })
   if (!valid || !user) {
+    console.log('[admin] reject: invalid initData')
     return res.status(401).json({ error: 'Недействительные данные Telegram' })
   }
 
   if (!isAdmin(user.id)) {
+    console.log('[admin] reject: not admin, userId=', user.id)
     return res.status(403).json({ error: 'Доступ запрещён' })
   }
 
+  console.log('[admin] ok: user', user.id)
   return { user }
 }
 
