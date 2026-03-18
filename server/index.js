@@ -27,8 +27,7 @@ app.get("/api/menu", async (req, res) => {
   }
 });
 
-app.all("/api/admin/*", (req, res, next) => {
-  req.path = req.path || req.url?.split("?")[0];
+app.all("/api/admin/*", (req, res) => {
   adminHandler(req, res).catch((err) => {
     console.error("[server] /api/admin error:", err);
     res.status(500).json({ error: "Server error" });
