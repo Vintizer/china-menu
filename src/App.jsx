@@ -6,6 +6,8 @@ import Cart from './pages/Cart.jsx'
 import Checkout from './pages/Checkout.jsx'
 import Confirmation from './pages/Confirmation.jsx'
 import Search from './pages/Search.jsx'
+import Favorites from './pages/Favorites.jsx'
+import Orders from './pages/Orders.jsx'
 
 export default function App() {
   const location = useLocation()
@@ -17,6 +19,8 @@ export default function App() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/favorites" element={<Favorites />} />
+      <Route path="/orders" element={<Orders />} />
       <Route path="/search" element={<Search />} />
       <Route path="/category/:id" element={<Category />} />
       <Route path="/cart" element={<Cart />} />

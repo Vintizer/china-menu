@@ -1,19 +1,23 @@
 import { useNavigate } from 'react-router-dom'
-import { useMenu } from '../hooks/useMenu.js'
+import { useMenu, getAllItems } from '../hooks/useMenu.js'
 import useT from '../hooks/useT.js'
-import CategoryCard from '../components/CategoryCard.jsx'
+import useFavoritesStore from '../store/favoritesStore.js'
+import DishCard from '../components/DishCard.jsx'
 import CartBar from '../components/CartBar.jsx'
 import LangToggle from '../components/LangToggle.jsx'
 import MainTabs from '../components/MainTabs.jsx'
 
-export default function Home() {
+export default function Favorites() {
   const navigate = useNavigate()
   const { menu, loading } = useMenu()
   const T = useT()
+  const favoriteCodes = useFavoritesStore((s) => s.codes)
+  const allItems = menu ? getAllItems(menu) : []
+  const favoriteDishes = allItems.filter((d) => favoriteCodes.includes(d.code))
 
   return (
-    <div className="min-h-dvh pattern-bg pb-28">
-      {/* Top bar */}
+    <div className="min-h-dvh bg-warm pb-28">
+      {/* Top bar - same as Home */}
       <div className="sticky top-0 z-50 bg-warm/95 backdrop-blur-sm border-b border-warm-dark px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
           <div className="w-9 h-9 rounded-full bg-red flex items-center justify-center shadow-md">
@@ -55,56 +59,33 @@ export default function Home() {
         <MainTabs />
       </div>
 
-      {/* Hero */}
-      <div className="px-4 pt-6 pb-4 text-center">
-        <h1 className="cn-text font-bold text-red text-4xl leading-none">家园中餐厅</h1>
-        <p className="text-gold font-bold text-xs tracking-[0.25em] uppercase mt-2">Chinese Restaurant</p>
-        <div className="flex items-center justify-center gap-3 mt-3">
-          <div className="h-px bg-gold/40 flex-1" />
-          <span className="text-ink font-bold text-sm">{T.heroTitle}</span>
-          <div className="h-px bg-gold/40 flex-1" />
-        </div>
-      </div>
-
-      {/* Categories grid */}
-      <div className="px-4 mt-4">
+      <div className="px-4 pt-4 flex flex-col gap-3">
         {loading ? (
-          <div className="grid grid-cols-2 gap-3 stagger-children">
-            {[...Array(8)].map((_, i) => (
-              <div key={i} className="bg-white rounded-2xl h-36 animate-pulse" />
-            ))}
-          </div>
-        ) : (
-          <div className="grid grid-cols-2 gap-3 stagger-children">
-            {menu?.categories?.map((cat, i) => (
-              <CategoryCard
-                key={cat.id}
-                category={cat}
-                style={{ animationDelay: `${i * 0.06}s` }}
-              />
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* Promo banner */}
-      {!loading && (
-        <div className="mx-4 mt-4 bg-gradient-to-r from-red to-red-dark rounded-2xl p-4 flex items-center justify-between overflow-hidden relative">
-          <div className="absolute right-4 top-1/2 -translate-y-1/2 opacity-10 text-white text-[80px] leading-none cn-text font-bold">
-            餐
-          </div>
-          <div className="relative z-10">
-            <p className="cn-text text-white font-bold text-lg leading-tight">{T.todaySpecial}</p>
-            <p className="text-white/80 text-xs">{T.todaySpecialSub}</p>
+          [...Array(4)].map((_, i) => (
+            <div key={i} className="bg-white rounded-2xl h-64 animate-pulse" />
+          ))
+        ) : favoriteDishes.length === 0 ? (
+          <div className="text-center py-16 text-gray-400">
+            <p className="text-4xl mb-3">❤️</p>
+            <p className="font-semibold">{T.favoritesEmpty}</p>
+            <p className="text-sm mt-1">{T.favoritesEmptySub}</p>
             <button
-              onClick={() => navigate('/category/O')}
-              className="mt-2 bg-white text-red text-xs font-bold px-3 py-1.5 rounded-full active:scale-95 transition-transform"
+              onClick={() => navigate('/')}
+              className="mt-4 btn-primary"
             >
-              {T.viewDetails}
+              {T.goToMenu}
             </button>
           </div>
-        </div>
-      )}
+        ) : (
+          favoriteDishes.map((dish, i) => (
+            <DishCard
+              key={dish.code}
+              dish={dish}
+              style={{ animationDelay: `${i * 0.05}s` }}
+            />
+          ))
+        )}
+      </div>
 
       <CartBar />
     </div>

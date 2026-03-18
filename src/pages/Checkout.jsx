@@ -207,9 +207,12 @@ export default function Checkout() {
           </div>
           {form.timePreference === 'scheduled' && (
             <div className="mt-2">
-              <label className="block text-xs font-semibold text-gray-500 mb-1.5 ml-1">{T.scheduledTime}</label>
+              <label className="block text-xs font-semibold text-gray-500 mb-1.5 ml-1">
+                {T.scheduledTime} <span className="text-gray-400 font-normal">{T.scheduledTimeHint}</span>
+              </label>
               <input
                 type="time"
+                step="900"
                 value={form.scheduledTime}
                 onChange={(e) => {
                   setForm((f) => ({ ...f, scheduledTime: e.target.value }))

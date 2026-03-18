@@ -79,6 +79,8 @@ export const t = {
     // Orders history
     myOrders: 'Мои заказы',
     repeatOrderBtn: 'Повторить',
+    ordersEmpty: 'Нет прошлых заказов',
+    ordersEmptySub: 'Оформите заказ — он появится здесь',
 
     // Delivery
     deliveryType: 'Тип заказа',
@@ -88,6 +90,7 @@ export const t = {
     asap: 'Как можно скорее',
     scheduled: 'Ко времени',
     scheduledTime: 'Время',
+    scheduledTimeHint: '(24ч, напр. 14:00)',
     phScheduledTime: '14:00',
     errScheduledTime: 'Укажите время',
   },
@@ -172,6 +175,8 @@ export const t = {
     // Orders history
     myOrders: '我的订单',
     repeatOrderBtn: '再来一单',
+    ordersEmpty: '暂无历史订单',
+    ordersEmptySub: '下单后订单将显示在这里',
 
     // Delivery
     deliveryType: '订单类型',
@@ -181,6 +186,7 @@ export const t = {
     asap: '尽快',
     scheduled: '指定时间',
     scheduledTime: '时间',
+    scheduledTimeHint: '(24小时制，如 14:00)',
     phScheduledTime: '14:00',
     errScheduledTime: '请选择时间',
   },
