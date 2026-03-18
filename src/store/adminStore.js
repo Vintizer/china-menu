@@ -14,8 +14,8 @@ const useAdminStore = create((set) => ({
       const res = await fetch('/api/admin/check', {
         headers: { 'X-Telegram-Init-Data': initData },
       })
-      const data = await res.json().catch(() => ({}))
-      set({ isAdmin: !data.error, checked: true })
+      const data = await res.json().catch(() => ({ error: 'parse' }))
+      set({ isAdmin: res.ok && !data.error, checked: true })
     } catch {
       set({ isAdmin: false, checked: true })
     }

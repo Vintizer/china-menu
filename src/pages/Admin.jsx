@@ -40,11 +40,11 @@ export default function Admin() {
     }
 
     adminFetch('/check')
-      .then(r => r.json())
-      .then(data => {
-        if (data.error) {
+      .then(async r => {
+        const data = await r.json().catch(() => ({ error: 'Ошибка ответа сервера' }))
+        if (!r.ok || data.error) {
           setStatus('denied')
-          setDenyReason(data.error)
+          setDenyReason(data.error || 'Доступ запрещён')
           return
         }
         setStatus('ok')
@@ -52,7 +52,7 @@ export default function Admin() {
       })
       .catch(() => {
         setStatus('denied')
-        setDenyReason('Ошибка проверки доступа')
+        setDenyReason('Сервер недоступен. Проверьте подключение.')
       })
   }, [])
 
