@@ -7,12 +7,7 @@ function requireAdmin(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*')
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-Telegram-Init-Data')
 
-  let initData = req.headers['x-telegram-init-data'] || req.body?.initData
-  if (initData && /^[A-Za-z0-9+/=]+$/.test(initData)) {
-    try {
-      initData = Buffer.from(initData, 'base64').toString('utf-8')
-    } catch {}
-  }
+  const initData = req.headers['x-telegram-init-data'] || req.body?.initData
   console.log('[admin] requireAdmin:', { hasInitData: !!initData, initDataLen: initData?.length, startsWith: initData?.slice(0, 30) })
   if (!initData) {
     console.log('[admin] reject: no initData')
