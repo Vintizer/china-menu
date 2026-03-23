@@ -1,17 +1,33 @@
 import { useNavigate } from 'react-router-dom'
 import { useMenu } from '../hooks/useMenu.js'
 import useT from '../hooks/useT.js'
+import useLangStore from '../store/langStore.js'
 import useAdminStore from '../store/adminStore.js'
 import CategoryCard from '../components/CategoryCard.jsx'
 import CartBar from '../components/CartBar.jsx'
 import LangToggle from '../components/LangToggle.jsx'
 import MainTabs from '../components/MainTabs.jsx'
 
+function promoDateRange(promo, lang) {
+  const s = String(promo.starts_on || '').slice(0, 10)
+  const e = String(promo.ends_on || '').slice(0, 10)
+  if (!s || !e) return ''
+  const [ys, ms, ds] = s.split('-')
+  const [ye, me, de] = e.split('-')
+  if (lang === 'ru') {
+    if (ys === ye) return `${ds}.${ms}–${de}.${me}.${ye}`
+    return `${ds}.${ms}.${ys}–${de}.${me}.${ye}`
+  }
+  return `${ys}年${ms}月${ds}日–${ye}年${me}月${de}日`
+}
+
 export default function Home() {
   const navigate = useNavigate()
   const { menu, loading } = useMenu()
   const T = useT()
+  const lang = useLangStore(s => s.lang)
   const isAdmin = useAdminStore(s => s.isAdmin)
+  const promotions = menu?.promotions ?? []
 
   return (
     <div className="min-h-dvh pattern-bg pb-28">
@@ -100,8 +116,53 @@ export default function Home() {
         )}
       </div>
 
-      {/* Promo banner */}
-      {!loading && (
+      {/* Акции из БД / public/promotions.json (dev) */}
+      {!loading &&
+        promotions.map((promo) => {
+          const ru = lang === 'ru'
+          const title = ru ? promo.title_ru : promo.title_cn || promo.title_ru
+          const desc = ru ? promo.description_ru : promo.description_cn || promo.description_ru
+          const terms = ru ? promo.terms_ru : promo.terms_cn || promo.terms_ru
+          const cta =
+            ru ? promo.cta_label_ru || T.viewDetails : promo.cta_label_cn || promo.cta_label_ru || T.viewDetails
+          const cat = promo.cta_category_id || 'O'
+          return (
+            <div
+              key={promo.id}
+              className="mx-4 mt-4 rounded-2xl overflow-hidden shadow-card border-2 border-gold/50 bg-[#8B0000]"
+            >
+              {promo.image ? (
+                <img
+                  src={`/images/${promo.image}`}
+                  alt=""
+                  className="w-full aspect-[4/3] object-cover object-top"
+                  loading="lazy"
+                />
+              ) : null}
+              <div className="p-4 text-white">
+                <p className="text-gold/90 text-[10px] font-bold uppercase tracking-widest mb-1">
+                  {promoDateRange(promo, lang)}
+                </p>
+                <h2 className={`font-black text-lg leading-tight mb-2 ${ru ? '' : 'cn-text'}`}>{title}</h2>
+                <p className={`text-white/95 text-sm leading-snug ${ru ? '' : 'cn-text'}`}>{desc}</p>
+                {terms ? (
+                  <p className="text-white/55 text-[11px] leading-snug mt-2 border-t border-white/10 pt-2">
+                    {terms}
+                  </p>
+                ) : null}
+                <button
+                  type="button"
+                  onClick={() => navigate(`/category/${cat}`)}
+                  className="mt-3 w-full bg-gold text-[#5c0404] text-sm font-black py-2.5 rounded-xl active:scale-[0.98] transition-transform"
+                >
+                  {cta}
+                </button>
+              </div>
+            </div>
+          )
+        })}
+
+      {!loading && promotions.length === 0 && (
         <div className="mx-4 mt-4 bg-gradient-to-r from-red to-red-dark rounded-2xl p-4 flex items-center justify-between overflow-hidden relative">
           <div className="absolute right-4 top-1/2 -translate-y-1/2 opacity-10 text-white text-[80px] leading-none cn-text font-bold">
             餐

@@ -65,7 +65,29 @@ async function seed() {
       )
     `)
 
-    // Очищаем существующие данные
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS promotions (
+        id                 SERIAL PRIMARY KEY,
+        title_ru           TEXT        NOT NULL,
+        title_cn           TEXT,
+        description_ru     TEXT        NOT NULL,
+        description_cn     TEXT,
+        terms_ru           TEXT,
+        terms_cn           TEXT,
+        image              TEXT,
+        starts_on          DATE        NOT NULL,
+        ends_on            DATE        NOT NULL,
+        dish_codes         VARCHAR(10)[] NOT NULL DEFAULT '{}',
+        cta_category_id    VARCHAR(4)  REFERENCES categories(id),
+        cta_label_ru       TEXT,
+        cta_label_cn       TEXT,
+        sort_order         INTEGER     DEFAULT 0,
+        active             BOOLEAN     DEFAULT true
+      )
+    `)
+
+    // Очищаем существующие данные (акции раньше категорий — FK cta_category_id)
+    await client.query('DELETE FROM promotions')
     await client.query('DELETE FROM dishes')
     await client.query('DELETE FROM categories')
 
@@ -102,6 +124,31 @@ async function seed() {
 
       console.log(`  ✓ [${cat.id}] ${cat.name_ru} — ${cat.items.length} блюд`)
     }
+
+    await client.query(
+      `INSERT INTO promotions (
+         title_ru, title_cn, description_ru, description_cn, terms_ru, terms_cn,
+         image, starts_on, ends_on, dish_codes, cta_category_id, cta_label_ru, cta_label_cn, sort_order, active
+       ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)`,
+      [
+        'Серия «Сухой горшочек» (干锅)',
+        '干锅系列特惠',
+        'При покупке любого блюда серии 干锅 — в подарок: 2 порции риса или 3 пары паровых булочек (мантоу).',
+        '购买干锅系列菜品即送两份米饭或3个馒头！',
+        'Только при заказе в зале. Один подарок на одного гостя. Подарок не выдаётся на вынос.',
+        '活动仅限堂食。每人限领一份。赠品不外带。',
+        'promo-dry-pot-mar2026.png',
+        '2026-03-23',
+        '2026-03-29',
+        ['O1', 'O2', 'O3', 'O4', 'O5', 'O6'],
+        'O',
+        'К блюдам 干锅',
+        '查看干锅',
+        0,
+        true,
+      ]
+    )
+    console.log('  ✓ Акция «Сухой горшочек» (flyer 23–29.03)')
 
     await client.query('COMMIT')
     console.log(`\n✅ Готово! Загружено: ${menu.categories.length} категорий, ${totalDishes} блюд`)
