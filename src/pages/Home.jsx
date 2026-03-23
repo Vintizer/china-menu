@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useMenu } from '../hooks/useMenu.js'
 import useT from '../hooks/useT.js'
@@ -28,6 +29,11 @@ export default function Home() {
   const lang = useLangStore(s => s.lang)
   const isAdmin = useAdminStore(s => s.isAdmin)
   const promotions = menu?.promotions ?? []
+  const [promoExpanded, setPromoExpanded] = useState(true)
+
+  const promoSectionTitle = lang === 'ru' ? 'Акции' : '优惠活动'
+  const promoCollapseHint = lang === 'ru' ? 'Свернуть' : '收起'
+  const promoExpandHint = lang === 'ru' ? 'Развернуть' : '展开'
 
   return (
     <div className="min-h-dvh pattern-bg pb-28">
@@ -84,6 +90,89 @@ export default function Home() {
         <MainTabs />
       </div>
 
+      {/* Акции — сверху, по умолчанию развёрнуты */}
+      {!loading && promotions.length > 0 && (
+        <div className="px-4 pt-3">
+          <div className="rounded-2xl border-2 border-gold/45 bg-white/80 shadow-card overflow-hidden">
+            <button
+              type="button"
+              onClick={() => setPromoExpanded((v) => !v)}
+              className="w-full flex items-center justify-between gap-2 px-3 py-2.5 text-left active:bg-warm-dark/40 transition-colors"
+              aria-expanded={promoExpanded}
+              aria-label={promoExpanded ? promoCollapseHint : promoExpandHint}
+            >
+              <span className="font-black text-ink text-sm tracking-tight">{promoSectionTitle}</span>
+              <span className="flex items-center gap-2 shrink-0">
+                <span className="text-ink/45 text-xs font-semibold max-[360px]:hidden">
+                  {promoExpanded ? promoCollapseHint : promoExpandHint}
+                </span>
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.2"
+                  className={`text-red transition-transform duration-200 ${promoExpanded ? 'rotate-180' : ''}`}
+                  aria-hidden
+                >
+                  <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </span>
+            </button>
+            {promoExpanded && (
+              <div className="px-2 pb-3 pt-2 space-y-3 border-t border-gold/25">
+                {promotions.map((promo) => {
+                  const ru = lang === 'ru'
+                  const title = ru ? promo.title_ru : promo.title_cn || promo.title_ru
+                  const desc = ru ? promo.description_ru : promo.description_cn || promo.description_ru
+                  const terms = ru ? promo.terms_ru : promo.terms_cn || promo.terms_ru
+                  const cta =
+                    ru
+                      ? promo.cta_label_ru || T.viewDetails
+                      : promo.cta_label_cn || promo.cta_label_ru || T.viewDetails
+                  const cat = promo.cta_category_id || 'O'
+                  return (
+                    <div
+                      key={promo.id}
+                      className="rounded-2xl overflow-hidden shadow-card border-2 border-gold/50 bg-[#8B0000]"
+                    >
+                      {promo.image ? (
+                        <img
+                          src={`/images/${promo.image}`}
+                          alt=""
+                          className="w-full aspect-[4/3] object-cover object-top"
+                          loading="lazy"
+                        />
+                      ) : null}
+                      <div className="p-4 text-white">
+                        <p className="text-gold/90 text-[10px] font-bold uppercase tracking-widest mb-1">
+                          {promoDateRange(promo, lang)}
+                        </p>
+                        <h2 className={`font-black text-lg leading-tight mb-2 ${ru ? '' : 'cn-text'}`}>{title}</h2>
+                        <p className={`text-white/95 text-sm leading-snug ${ru ? '' : 'cn-text'}`}>{desc}</p>
+                        {terms ? (
+                          <p className="text-white/55 text-[11px] leading-snug mt-2 border-t border-white/10 pt-2">
+                            {terms}
+                          </p>
+                        ) : null}
+                        <button
+                          type="button"
+                          onClick={() => navigate(`/category/${cat}`)}
+                          className="mt-3 w-full bg-gold text-[#5c0404] text-sm font-black py-2.5 rounded-xl active:scale-[0.98] transition-transform"
+                        >
+                          {cta}
+                        </button>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Hero */}
       <div className="px-4 pt-6 pb-4 text-center">
         <h1 className="cn-text font-bold text-red text-4xl leading-none">家园中餐厅</h1>
@@ -115,52 +204,6 @@ export default function Home() {
           </div>
         )}
       </div>
-
-      {/* Акции из БД / public/promotions.json (dev) */}
-      {!loading &&
-        promotions.map((promo) => {
-          const ru = lang === 'ru'
-          const title = ru ? promo.title_ru : promo.title_cn || promo.title_ru
-          const desc = ru ? promo.description_ru : promo.description_cn || promo.description_ru
-          const terms = ru ? promo.terms_ru : promo.terms_cn || promo.terms_ru
-          const cta =
-            ru ? promo.cta_label_ru || T.viewDetails : promo.cta_label_cn || promo.cta_label_ru || T.viewDetails
-          const cat = promo.cta_category_id || 'O'
-          return (
-            <div
-              key={promo.id}
-              className="mx-4 mt-4 rounded-2xl overflow-hidden shadow-card border-2 border-gold/50 bg-[#8B0000]"
-            >
-              {promo.image ? (
-                <img
-                  src={`/images/${promo.image}`}
-                  alt=""
-                  className="w-full aspect-[4/3] object-cover object-top"
-                  loading="lazy"
-                />
-              ) : null}
-              <div className="p-4 text-white">
-                <p className="text-gold/90 text-[10px] font-bold uppercase tracking-widest mb-1">
-                  {promoDateRange(promo, lang)}
-                </p>
-                <h2 className={`font-black text-lg leading-tight mb-2 ${ru ? '' : 'cn-text'}`}>{title}</h2>
-                <p className={`text-white/95 text-sm leading-snug ${ru ? '' : 'cn-text'}`}>{desc}</p>
-                {terms ? (
-                  <p className="text-white/55 text-[11px] leading-snug mt-2 border-t border-white/10 pt-2">
-                    {terms}
-                  </p>
-                ) : null}
-                <button
-                  type="button"
-                  onClick={() => navigate(`/category/${cat}`)}
-                  className="mt-3 w-full bg-gold text-[#5c0404] text-sm font-black py-2.5 rounded-xl active:scale-[0.98] transition-transform"
-                >
-                  {cta}
-                </button>
-              </div>
-            </div>
-          )
-        })}
 
       {!loading && promotions.length === 0 && (
         <div className="mx-4 mt-4 bg-gradient-to-r from-red to-red-dark rounded-2xl p-4 flex items-center justify-between overflow-hidden relative">
